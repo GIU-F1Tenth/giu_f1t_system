@@ -108,10 +108,11 @@ def generate_launch_description():
         parameters=[LaunchConfiguration('vesc_config')]
     )
     urg_node = Node(
-        package='urg_node',
-        executable='urg_node_driver',
-        name='urg_node',
-        parameters=[LaunchConfiguration('sensors_config')]
+        package='urg_node2',
+        executable='urg_node2_node',
+        name='lidar_node',
+        parameters=[LaunchConfiguration('sensors_config')],
+        namespace='',
     )
     ackermann_mux_node = Node(
         package='ackermann_mux',
