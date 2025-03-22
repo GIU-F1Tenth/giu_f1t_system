@@ -78,8 +78,8 @@ def generate_launch_description():
         parameters=[LaunchConfiguration('joy_config')]
     )
     joy_teleop_node = Node(
-        package='joy_teleop',
-        executable='joy_teleop',
+        package='joystick_converter',
+        executable='joystick_converter_consumer_node',
         name='joy_teleop',
         parameters=[LaunchConfiguration('joy_config')]
     )
