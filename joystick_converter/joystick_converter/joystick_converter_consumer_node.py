@@ -41,8 +41,6 @@ class JoyNetworkConsumer(Node):
 
             # Publish the message to the /joy topic
             self.publisher.publish(msg)
-
-            self.get_logger().info("Received and published /joy message")
         except Exception as e:
             self.get_logger().error(
                 f"Failed to receive or publish /joy message: {e}")
