@@ -121,7 +121,7 @@ def generate_launch_description():
     )
     throttle_interpolator_node = Node(
         package='f1tenth_stack',
-    executable='throttle_interpolator',
+        executable='throttle_interpolator',
         name='throttle_interpolator',
         parameters=[LaunchConfiguration('vesc_config')]
     )
