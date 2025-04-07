@@ -95,12 +95,6 @@ def generate_launch_description():
         name='joy_teleop',
         parameters=[LaunchConfiguration('joy_config')]
     )
-    joy_node = Node(
-        package='joystick_converter',
-        executable='joystick_converter_consumer_node',
-        name='joy',
-        parameters=[LaunchConfiguration('joy_config')]
-    )
     ackermann_to_vesc_node = Node(
         package='vesc_ackermann',
         executable='ackermann_to_vesc_node',
@@ -147,6 +141,18 @@ def generate_launch_description():
         name='static_baselink_to_laser',
         arguments=['0.27', '0.0', '0.11', '0.0', '0.0', '0.0', 'base_link', 'laser']
     )
+    converter_node = Node(
+        package='gap_follower',
+        executable='twist2ackermann_exe',
+        name='converter_node',
+        parameters=[LaunchConfiguration('gap_follower_config')],
+    )
+    safety_node = Node(
+        package='safety_node',
+        executable='safety_node',
+        name='safety_node',
+    )
+
 
     urg_node2_node_configure_event_handler = RegisterEventHandler(
         event_handler=OnProcessStart(
@@ -181,7 +187,6 @@ def generate_launch_description():
     )
     
     # finalize
-    ld.add_action(joy_node)
     ld.add_action(joy_teleop_node)
     ld.add_action(ackermann_to_vesc_node)
     ld.add_action(vesc_to_odom_node)
@@ -189,6 +194,8 @@ def generate_launch_description():
     # ld.add_action(throttle_interpolator_node)
     ld.add_action(ackermann_mux_node)
     ld.add_action(static_tf_node)
+    ld.add_action(converter_node)
+    ld.add_action(safety_node)
     
     ld.add_action(DeclareLaunchArgument('auto_start', default_value='true'))
     ld.add_action(DeclareLaunchArgument('node_name', default_value='urg_node2'))
