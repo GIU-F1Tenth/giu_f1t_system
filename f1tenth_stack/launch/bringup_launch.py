@@ -64,6 +64,21 @@ def generate_launch_description():
         'config',
         'params_ether.yaml'
     )
+    map_server_config = os.path.join(
+        get_package_share_directory('f1tenth_stack'),
+        'config',
+        'map.yaml'
+    )
+    gap_follower_config = os.path.join(
+        get_package_share_directory('f1tenth_stack'),
+        'config',
+        'gap_follow_config.yaml'
+    )
+    amcl_config = os.path.join(
+        get_package_share_directory('f1tenth_stack'),
+        'config',
+        'nav2_hybrid_a_star_params.yaml'
+    )
 
     joy_la = DeclareLaunchArgument(
         'joy_config',
@@ -86,8 +101,18 @@ def generate_launch_description():
         default_value=urg_config,
         description='Descriptions for urg config'
     )
+    gap_follower_la = DeclareLaunchArgument(
+        'gap_follower_config',
+        default_value=gap_follower_config,
+        description='Descriptions for gap follower config'
+    )
+    amcl_la = DeclareLaunchArgument(
+        'amcl_config',
+        default_value=amcl_config,
+        description='Descriptions for amcl config'
+    )
 
-    ld = LaunchDescription([joy_la, vesc_la, sensors_la, mux_la, urg_la])
+    ld = LaunchDescription([joy_la, vesc_la, sensors_la, mux_la, urg_la, gap_follower_la, amcl_la])
 
     joy_teleop_node = Node(
         package='joy_teleop',
@@ -152,7 +177,33 @@ def generate_launch_description():
         executable='safety_node',
         name='safety_node',
     )
-
+    map_server_node = LifecycleNode(
+        package='nav2_map_server',
+        executable='map_server',
+        name='map_server',
+        output='screen',
+        parameters=[{'yaml_filename': map_server_config}],
+        namespace='',
+    )   
+    amcl_node = LifecycleNode(
+        package='nav2_amcl',
+        executable='amcl',
+        name='amcl',
+        output='screen',
+        parameters=[LaunchConfiguration('amcl_config')],
+        namespace='',
+    )   
+    lifecycle_manager_node = Node(
+        package='nav2_lifecycle_manager',
+        executable='lifecycle_manager',
+        name='lifecycle_manager_map',
+        output='screen',
+        parameters=[{
+            'use_sim_time': False,
+            'autostart': True,
+            'node_names': ['map_server', 'amcl']
+        }]
+    )
 
     urg_node2_node_configure_event_handler = RegisterEventHandler(
         event_handler=OnProcessStart(
@@ -203,6 +254,9 @@ def generate_launch_description():
     ld.add_action(urg_node)
     ld.add_action(urg_node2_node_configure_event_handler)
     ld.add_action(urg_node2_node_activate_event_handler)
+    ld.add_action(map_server_node)
+    ld.add_action(amcl_node)
+    ld.add_action(lifecycle_manager_node)
 
     
     return ld
