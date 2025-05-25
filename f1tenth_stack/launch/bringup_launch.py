@@ -166,12 +166,6 @@ def generate_launch_description():
         name='static_baselink_to_laser',
         arguments=['0.27', '0.0', '0.11', '0.0', '0.0', '0.0', 'base_link', 'laser']
     )
-    converter_node = Node(
-        package='gap_follower',
-        executable='twist2ackermann_exe',
-        name='converter_node',
-        parameters=[LaunchConfiguration('gap_follower_config')],
-    )
     safety_node = Node(
         package='safety_node',
         executable='safety_node',
@@ -245,7 +239,6 @@ def generate_launch_description():
     # ld.add_action(throttle_interpolator_node)
     ld.add_action(ackermann_mux_node)
     ld.add_action(static_tf_node)
-    ld.add_action(converter_node)
     # ld.add_action(safety_node)
     
     ld.add_action(DeclareLaunchArgument('auto_start', default_value='true'))
