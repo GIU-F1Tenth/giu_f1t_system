@@ -77,7 +77,7 @@ def generate_launch_description():
     amcl_config = os.path.join(
         get_package_share_directory('f1tenth_stack'),
         'config',
-        'nav2_hybrid_a_star_params.yaml'
+        'nav2_amcl.yaml'
     )
 
     joy_la = DeclareLaunchArgument(
