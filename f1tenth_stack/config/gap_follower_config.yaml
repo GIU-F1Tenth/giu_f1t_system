@@ -3,7 +3,7 @@ gap_steering_node:
     scan_topic: "/scan"
     drive_topic: "/ackermann_cmd"
     filtered_scan_topic: "/filtered_scan"
-    limit_angle: 70.0
+    limit_angle: 60.0
     kp: 0.51
     kd: 1.1
     arc_length: 0.42

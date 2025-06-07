@@ -188,13 +188,13 @@ def generate_launch_description():
         namespace='',
     )   
     
-    costmap_node = LifecycleNode(
-        package='nav2_costmap_2d',
-        executable='nav2_costmap_2d',
-        name='costmap',
-        namespace='costmap',
+    # note that the planner server launches the global and local costmaps. DON'T run other nav2_costmap_2d !!
+    planner = Node(
+        package='nav2_planner',
+        executable='planner_server',
+        name='planner_server',
         output='screen',
-        parameters=[os.path.join(get_package_share_directory('f1tenth_stack'),'config','costmap_config.yaml')],
+        parameters=[os.path.join(get_package_share_directory('f1tenth_stack'),'config','nav2_hybrid_a_star_config.yaml')]
     )
 
     lifecycle_manager_node = Node(
@@ -205,7 +205,7 @@ def generate_launch_description():
         parameters=[{
             'use_sim_time': False,
             'autostart': True,
-            'node_names': ['map_server', 'amcl', '/costmap/costmap']
+            'node_names': ['map_server', 'amcl', 'planner_server']
         }]
     )
 
@@ -249,9 +249,7 @@ def generate_launch_description():
     # ld.add_action(throttle_interpolator_node)
     ld.add_action(ackermann_mux_node)
     ld.add_action(static_tf_node)
-    ld.add_action(costmap_node)
     # ld.add_action(safety_node)
-    
     ld.add_action(DeclareLaunchArgument('auto_start', default_value='true'))
     ld.add_action(DeclareLaunchArgument('node_name', default_value='urg_node2'))
     ld.add_action(DeclareLaunchArgument('scan_topic_name', default_value='scan'))
@@ -260,6 +258,7 @@ def generate_launch_description():
     ld.add_action(urg_node2_node_activate_event_handler)
     ld.add_action(map_server_node)
     ld.add_action(amcl_node)
+    ld.add_action(planner)
     ld.add_action(lifecycle_manager_node)
 
     
