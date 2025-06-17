@@ -70,15 +70,23 @@ def generate_launch_description():
         'map.yaml'
     )
     gap_follower_config = os.path.join(
-        get_package_share_directory('f1tenth_stack'),
-        'config',
-        'gap_follow_config.yaml'
+        get_package_share_directory('gap_follower'),
+        'config', 
+        'gap_follower_config.yaml'
     )
     amcl_config = os.path.join(
         get_package_share_directory('f1tenth_stack'),
         'config',
         'nav2_amcl.yaml'
     )
+    bt_config = os.path.join(
+        get_package_share_directory('giu_f1t_behavior_tree'),
+        'config',
+        'behavior_tree_params.yaml'
+    )
+    pp_config = os.path.join(get_package_share_directory("pure_pursuit"), "config", "params.yaml")
+    csv_config = os.path.join(get_package_share_directory("trajectory_planning"), "config", "csv_pub_config.yaml")
+    astar_lookahead_pp_config = os.path.join(get_package_share_directory("trajectory_planning"), "config", "astar_lookahead_pub_config.yaml")
 
     joy_la = DeclareLaunchArgument(
         'joy_config',
@@ -111,8 +119,18 @@ def generate_launch_description():
         default_value=amcl_config,
         description='Descriptions for amcl config'
     )
+    bt_la = DeclareLaunchArgument(
+        'bt_config',
+        default_value=bt_config,
+        description='Descriptions for bt config'
+    )
+    csv_pp_la = DeclareLaunchArgument(
+        'csv_config',
+        default_value=csv_config,
+        description='Descriptions for csv config'
+    )
 
-    ld = LaunchDescription([joy_la, vesc_la, sensors_la, mux_la, urg_la, gap_follower_la, amcl_la])
+    ld = LaunchDescription([joy_la, vesc_la, sensors_la, mux_la, urg_la, gap_follower_la, amcl_la, bt_la, csv_pp_la])
 
     joy_teleop_node = Node(
         package='joy_teleop',
@@ -137,6 +155,38 @@ def generate_launch_description():
         executable='vesc_driver_node',
         name='vesc_driver_node',
         parameters=[LaunchConfiguration('vesc_config')]
+    )
+    pure_pursuit_node = Node(
+        package='pure_pursuit',
+        executable='pure_pursuit_node',
+        name='pure_pursuit_node',
+        parameters=[pp_config],
+        output='screen'
+    )
+    csv_pp_node = Node(
+        package='trajectory_planning',
+        executable='csv_pub_exe',
+        name='csv_path_pub',
+        parameters=[csv_config],
+        output='screen'
+    )
+    gap_follower_node = Node(
+        package='gap_follower',
+        executable='steering_speed_exe',
+        name='gap_steering_node',
+        parameters=[gap_follower_config]
+    )
+    watchdog_node = Node(
+        package='watchdog',
+        executable='Watchdog_Node',
+        name='watchdog_node'
+    )
+    astar_lookahead_path_pub_node = Node(
+        package='trajectory_planning',
+        executable='astar_lookahead_pub_exe',
+        name='astar_lookahead_pub_node',
+        parameters=[astar_lookahead_pp_config],
+        output='screen'
     )
     throttle_interpolator_node = Node(
         package='f1tenth_stack',
@@ -187,6 +237,18 @@ def generate_launch_description():
         parameters=[LaunchConfiguration('amcl_config')],
         namespace='',
     )   
+    bt_node = Node(
+        package='giu_f1t_behavior_tree',
+        executable='bt_main',
+        name='behavior_tree',
+        output='screen',
+        parameters=[bt_config]
+    )
+    camera_obj_node = Node( 
+        package='camera_obj_detection',
+        executable='camera_obj_detection',
+        name='camera_obj_detection'
+    )
     
     # note that the planner server launches the global and local costmaps. DON'T run other nav2_costmap_2d !!
     planner = Node(
@@ -249,6 +311,11 @@ def generate_launch_description():
     # ld.add_action(throttle_interpolator_node)
     ld.add_action(ackermann_mux_node)
     ld.add_action(static_tf_node)
+    ld.add_action(pure_pursuit_node)
+    ld.add_action(gap_follower_node)
+    ld.add_action(watchdog_node)
+    ld.add_action(camera_obj_node)
+    ld.add_action(astar_lookahead_path_pub_node)
     # ld.add_action(safety_node)
     ld.add_action(DeclareLaunchArgument('auto_start', default_value='true'))
     ld.add_action(DeclareLaunchArgument('node_name', default_value='urg_node2'))
@@ -260,6 +327,8 @@ def generate_launch_description():
     ld.add_action(amcl_node)
     ld.add_action(planner)
     ld.add_action(lifecycle_manager_node)
+    ld.add_action(csv_pp_node)
+    ld.add_action(bt_node)
 
     
     return ld

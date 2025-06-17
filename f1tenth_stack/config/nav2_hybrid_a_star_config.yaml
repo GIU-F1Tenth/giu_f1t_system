@@ -31,7 +31,7 @@ planner_server:
       downsample_obstacle_heuristic: True
       allow_primitive_interpolation: False
       coarse_search_resolution: 4         # Number of bins to skip when doing a coarse search for the path. Only used for all_direction goal heading mode.
-      goal_heading_mode: "DEFAULT"        # DEFAULT, BIDIRECTIONAL, ALL_DIRECTION
+      goal_heading_mode: "ALL_DIRECTION"        # DEFAULT, BIDIRECTIONAL, ALL_DIRECTION
       smooth_path: True                   # If true, does a simple and quick smoothing post-processing to the path
 
       smoother:
@@ -119,7 +119,7 @@ global_costmap:
       inflation_layer:
         plugin: "nav2_costmap_2d::InflationLayer"
         cost_scaling_factor: 10.0
-        inflation_radius: 0.4
+        inflation_radius: 0.55
       always_send_full_costmap: True
 
 robot_state_publisher:
