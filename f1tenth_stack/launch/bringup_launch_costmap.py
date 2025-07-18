@@ -31,7 +31,7 @@ import os
 from launch.conditions import IfCondition
 from launch_ros.actions import LifecycleNode
 from launch.actions import (DeclareLaunchArgument, EmitEvent, RegisterEventHandler)
-from launch.event_handlers import OnProcessStart
+from launch.event_handlers import OnProcessStart, OnProcessExit
 from launch.events import matches_action
 from launch_ros.event_handlers import OnStateTransition
 from launch_ros.events.lifecycle import ChangeState
@@ -87,7 +87,8 @@ def generate_launch_description():
     pp_config = os.path.join(get_package_share_directory("pure_pursuit"), "config", "params.yaml")
     csv_config = os.path.join(get_package_share_directory("trajectory_planning"), "config", "csv_pub_config.yaml")
     astar_lookahead_pp_config = os.path.join(get_package_share_directory("trajectory_planning"), "config", "astar_lookahead_pub_config.yaml")
-
+    lookahead_to_planner_config = os.path.join(get_package_share_directory("trajectory_planning"), "config", "lookahead_to_planner_config.yaml")
+    planner_config = os.path.join(get_package_share_directory('f1tenth_stack'),'config','nav2_hybrid_a_star_config.yaml')
     joy_la = DeclareLaunchArgument(
         'joy_config',
         default_value=joy_teleop_config,
@@ -129,8 +130,13 @@ def generate_launch_description():
         default_value=csv_config,
         description='Descriptions for csv config'
     )
+    lookahead_to_planner_la = DeclareLaunchArgument(
+        'lookahead_to_planner_config',
+        default_value=lookahead_to_planner_config,
+        description='Descriptions for astar lookahead pp config'
+    )
 
-    ld = LaunchDescription([joy_la, vesc_la, sensors_la, mux_la, urg_la, gap_follower_la, amcl_la, bt_la, csv_pp_la])
+    ld = LaunchDescription([joy_la, vesc_la, sensors_la, mux_la, urg_la, gap_follower_la, amcl_la, bt_la, csv_pp_la, lookahead_to_planner_la])
 
     joy_teleop_node = Node(
         package='joy_teleop',
@@ -168,6 +174,13 @@ def generate_launch_description():
         executable='csv_pub_exe',
         name='csv_path_pub',
         parameters=[csv_config],
+        output='screen'
+    )
+    lookahead_to_planner_node = Node(
+        package='trajectory_planning',
+        executable='lookahead_to_planner_exe',
+        name='astar_lookahead_pub_node',
+        parameters=[lookahead_to_planner_config],
         output='screen'
     )
     gap_follower_node = Node(
@@ -228,7 +241,7 @@ def generate_launch_description():
         output='screen',
         parameters=[{'yaml_filename': map_server_config}],
         namespace='',
-    )   
+    )
     amcl_node = LifecycleNode(
         package='nav2_amcl',
         executable='amcl',
@@ -256,7 +269,7 @@ def generate_launch_description():
         executable='planner_server',
         name='planner_server',
         output='screen',
-        parameters=[os.path.join(get_package_share_directory('f1tenth_stack'),'config','nav2_hybrid_a_star_config.yaml')]
+        parameters=[planner_config]
     )
 
     lifecycle_manager_node = Node(
@@ -314,8 +327,9 @@ def generate_launch_description():
     ld.add_action(pure_pursuit_node)
     ld.add_action(gap_follower_node)
     ld.add_action(watchdog_node)
-    ld.add_action(camera_obj_node)
+    # ld.add_action(camera_obj_node)
     ld.add_action(astar_lookahead_path_pub_node)
+    ld.add_action(lookahead_to_planner_node)
     # ld.add_action(safety_node)
     ld.add_action(DeclareLaunchArgument('auto_start', default_value='true'))
     ld.add_action(DeclareLaunchArgument('node_name', default_value='urg_node2'))
@@ -327,7 +341,7 @@ def generate_launch_description():
     ld.add_action(amcl_node)
     ld.add_action(planner)
     ld.add_action(lifecycle_manager_node)
-    ld.add_action(csv_pp_node)
+    # ld.add_action(csv_pp_node)
     ld.add_action(bt_node)
 
     

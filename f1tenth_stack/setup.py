@@ -26,7 +26,8 @@ setup(
         'console_scripts': [
             'throttle_interpolator = f1tenth_stack.throttle_interpolator:main',
             'tf_publisher = f1tenth_stack.tf_publisher:main',
-            'lap_time_node = f1tenth_stack.lap_timer_node:main'
+            'lap_time_node = f1tenth_stack.lap_timer_node:main',
+            'costmap_reset_node = f1tenth_stack.costmap_reset_node:main',
         ],
     },
 )

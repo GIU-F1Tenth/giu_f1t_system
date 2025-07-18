@@ -267,7 +267,7 @@ def generate_launch_description():
     ld.add_action(static_tf_node)
     #ld.add_action(safety_node)
     ld.add_action(pure_pursuit_node)
-    ld.add_action(csv_pp_node)
+    # ld.add_action(csv_pp_node)
     
     ld.add_action(DeclareLaunchArgument('auto_start', default_value='true'))
     ld.add_action(DeclareLaunchArgument('node_name', default_value='urg_node2'))
