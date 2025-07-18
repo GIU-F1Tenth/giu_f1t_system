@@ -64,23 +64,6 @@ def generate_launch_description():
         'config',
         'params_ether.yaml'
     )
-    map_server_config = os.path.join(
-        get_package_share_directory('f1tenth_stack'),
-        'config',
-        'map.yaml'
-    )
-    gap_follower_config = os.path.join(
-        get_package_share_directory('f1tenth_stack'),
-        'config',
-        'gap_follow_config.yaml'
-    )
-    amcl_config = os.path.join(
-        get_package_share_directory('f1tenth_stack'),
-        'config',
-        'nav2_amcl.yaml'
-    )
-    pure_pursuit_config = os.path.join(get_package_share_directory("pure_pursuit"), "config", "params_solo.yaml")
-    csv_config = os.path.join(get_package_share_directory("trajectory_planning"), "config", "csv_pub_config_solo.yaml")
 
     joy_la = DeclareLaunchArgument(
         'joy_config',
@@ -108,43 +91,14 @@ def generate_launch_description():
     #     default_value=gap_follower_config,
     #     description='Descriptions for gap follower config'
     # )
-    amcl_la = DeclareLaunchArgument(
-        'amcl_config',
-        default_value=amcl_config,
-        description='Descriptions for amcl config'
-    )
-    pure_pursuit_la = DeclareLaunchArgument(
-        'pure_pursuit_config',
-        default_value=pure_pursuit_config,
-        description='Descriptions for pp config'
-    )
-    csv_pp_la = DeclareLaunchArgument(
-        'csv_config',
-        default_value=csv_config,
-        description='Descriptions for csv config'
-    )
 
-    ld = LaunchDescription([joy_la, vesc_la, sensors_la, mux_la, urg_la, amcl_la, pure_pursuit_la, csv_pp_la])
+    ld = LaunchDescription([joy_la, vesc_la, sensors_la, mux_la, urg_la])
 
     joy_teleop_node = Node(
         package='joy_teleop',
         executable='joy_teleop',
         name='joy_teleop',
         parameters=[LaunchConfiguration('joy_config')]
-    )
-    pure_pursuit_node = Node(
-            package='pure_pursuit',
-            executable='pure_pursuit_node',
-            name='pure_pursuit_node',
-            parameters=[pure_pursuit_config],
-            output='screen'
-    )
-    csv_pp_node = Node(
-            package='trajectory_planning',
-            executable='csv_pub_exe',
-            name='csv_path_pub',
-            parameters=[csv_config],
-            output='screen'
     )
     ackermann_to_vesc_node = Node(
         package='vesc_ackermann',
@@ -191,39 +145,7 @@ def generate_launch_description():
         executable='static_transform_publisher',
         name='static_baselink_to_laser',
         arguments=['0.27', '0.0', '0.11', '0.0', '0.0', '0.0', 'base_link', 'laser']
-    )
-    safety_node = Node(
-        package='safety_node',
-        executable='safety_node',
-        name='safety_node',
-    )
-    map_server_node = LifecycleNode(
-        package='nav2_map_server',
-        executable='map_server',
-        name='map_server',
-        output='screen',
-        parameters=[{'yaml_filename': map_server_config}],
-        namespace='',
-    )   
-    amcl_node = LifecycleNode(
-        package='nav2_amcl',
-        executable='amcl',
-        name='amcl',
-        output='screen',
-        parameters=[LaunchConfiguration('amcl_config')],
-        namespace='',
-    )   
-    lifecycle_manager_node = Node(
-        package='nav2_lifecycle_manager',
-        executable='lifecycle_manager',
-        name='lifecycle_manager_map',
-        output='screen',
-        parameters=[{
-            'use_sim_time': False,
-            'autostart': True,
-            'node_names': ['map_server', 'amcl']
-        }]
-    )
+    ) 
 
     urg_node2_node_configure_event_handler = RegisterEventHandler(
         event_handler=OnProcessStart(
@@ -266,8 +188,6 @@ def generate_launch_description():
     ld.add_action(ackermann_mux_node)
     ld.add_action(static_tf_node)
     #ld.add_action(safety_node)
-    ld.add_action(pure_pursuit_node)
-    # ld.add_action(csv_pp_node)
     
     ld.add_action(DeclareLaunchArgument('auto_start', default_value='true'))
     ld.add_action(DeclareLaunchArgument('node_name', default_value='urg_node2'))
@@ -275,9 +195,6 @@ def generate_launch_description():
     ld.add_action(urg_node)
     ld.add_action(urg_node2_node_configure_event_handler)
     ld.add_action(urg_node2_node_activate_event_handler)
-    ld.add_action(map_server_node)
-    ld.add_action(amcl_node)
-    ld.add_action(lifecycle_manager_node)
 
     
     return ld
