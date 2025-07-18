@@ -5,6 +5,35 @@ Drivers onboard f1tenth race cars. This branch is under development for migratio
 ## Deadman's switch
 On Logitech F-710 joysticks, the LB button is the deadman's switch for teleop, and the RB button is the deadman's switch for navigation. You can also remap buttons. See how on the readthedocs documentation.
 
+## Sick Lidar
+
+Note that sick_scan_xd does not have an apt package for ROS2 foxy, you can try installing [from source](https://github.com/SICKAG/sick_scan_xd). Follow these steps to install sick_scan_xd on Linux for ROS 2 Humble:
+
+```
+sudo apt update
+sudo apt-get install ros-humble-sick-scan-xd
+```
+
+Change the sick lidar ip address at `/opt/ros/humble/share/sick_scan_xd/launch/sick_tim_5xx.launch`
+
+Bring up with `ros2 launch f1tenth_stack sick_bringup_launch.py`
+
+See the [documentation of F1TENTH](https://f1tenth.readthedocs.io/en/foxy_test/getting_started/firmware/index.html) on how to get started.
+
+### Getting SICK Lidar IP
+
+The lidar is delivered with a standard IP address. There are two ways to read or change the IP address:
+
+1. **Using a Windows Computer :** Install [SICK SOPAS ET](https://www.sick.com/de/de/sopas-engineering-tool-2018/p/p367244) and follow [the instructions in the sick_scan_xd package](https://github.com/SICKAG/sick_scan_xd?tab=readme-ov-file#starting-with-a-new-lidar).
+
+2. **Using a Linux Computer :** You can scan the network for the lidar IP address using the following command:
+
+```bash
+nmap -sn
+```
+
+If you have a SICK lidar connected to the network, you will see the IP address of the lidar in the output.
+
 ## Topics
 
 ### Topics that the driver stack subscribe to
@@ -18,13 +47,13 @@ On Logitech F-710 joysticks, the LB button is the deadman's switch for teleop, a
 
 ## External Dependencies
 
-1. ackermann_msgs [https://index.ros.org/r/ackermann_msgs/#foxy](https://index.ros.org/r/ackermann_msgs/#foxy).
-2. urg_node [https://index.ros.org/p/urg_node/#foxy](https://index.ros.org/p/urg_node/#foxy). This is the driver for Hokuyo LiDARs.
-3. joy [https://index.ros.org/p/joy/#foxy](https://index.ros.org/p/joy/#foxy). This is the driver for joysticks in ROS 2.
-4. teleop_tools  [https://index.ros.org/p/teleop_tools/#foxy](https://index.ros.org/p/teleop_tools/#foxy). This is the package for teleop with joysticks in ROS 2.
+1. ackermann_msgs [https://index.ros.org/r/ackermann_msgs/#humble](https://index.ros.org/r/ackermann_msgs/#humble).
+2. urg_node [https://index.ros.org/p/urg_node/#humble](https://index.ros.org/p/urg_node/#humble). This is the driver for Hokuyo LiDARs.
+3. joy [https://index.ros.org/p/joy/#humble](https://index.ros.org/p/joy/#humble). This is the driver for joysticks in ROS 2.
+4. teleop_tools  [https://index.ros.org/p/teleop_tools/#humble](https://index.ros.org/p/teleop_tools/#humble). This is the package for teleop with joysticks in ROS 2.
 5. vesc [GitHub - f1tenth/vesc at ros2](https://github.com/f1tenth/vesc/tree/ros2). This is the driver for VESCs in ROS 2.
 6. ackermann_mux [GitHub - f1tenth/ackermann_mux: Twist multiplexer](https://github.com/f1tenth/ackermann_mux). This is a package for multiplexing ackermann messages in ROS 2.
-<!-- 7. rosbridge_suite [https://index.ros.org/p/rosbridge_suite/#foxy-overview](https://index.ros.org/p/rosbridge_suite/#foxy-overview) This is a package that allows for websocket connection in ROS 2. -->
+<!-- 7. rosbridge_suite [https://index.ros.org/p/rosbridge_suite/#humble-overview](https://index.ros.org/p/rosbridge_suite/#humble-overview) This is a package that allows for websocket connection in ROS 2. -->
 
 ## Package in this repo
 
