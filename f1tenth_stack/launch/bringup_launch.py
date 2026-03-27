@@ -81,7 +81,8 @@ def generate_launch_description():
     )
     pure_pursuit_config = os.path.join(get_package_share_directory("pure_pursuit"), "config", "params_solo.yaml")
     csv_config = os.path.join(get_package_share_directory("trajectory_planning"), "config", "csv_pub_config_solo.yaml")
-
+    trailing_controller_config = os.path.join(get_package_share_directory("trailing_controller"), "config", "trailing_controller_params.yaml")
+    
     joy_la = DeclareLaunchArgument(
         'joy_config',
         default_value=joy_teleop_config,
@@ -123,8 +124,13 @@ def generate_launch_description():
         default_value=csv_config,
         description='Descriptions for csv config'
     )
+    trailing_controller_la = DeclareLaunchArgument(
+        'trailing_controller_config',
+        default_value=trailing_controller_config,
+        description='Descriptions for trailing controller config'
+    )
 
-    ld = LaunchDescription([joy_la, vesc_la, sensors_la, mux_la, urg_la, amcl_la, pure_pursuit_la, csv_pp_la])
+    ld = LaunchDescription([joy_la, vesc_la, sensors_la, mux_la, urg_la, amcl_la, pure_pursuit_la, csv_pp_la, trailing_controller_la])
 
     joy_teleop_node = Node(
         package='joy_teleop',
@@ -212,7 +218,13 @@ def generate_launch_description():
         output='screen',
         parameters=[LaunchConfiguration('amcl_config')],
         namespace='',
-    )   
+    )  
+    trailing_controller_node = Node(
+        package='trailing_controller',
+        executable='trailing_controller_node',
+        name='trailing_controller_node',
+        parameters=[trailing_controller_config],
+    ) 
     lifecycle_manager_node = Node(
         package='nav2_lifecycle_manager',
         executable='lifecycle_manager',
@@ -267,6 +279,7 @@ def generate_launch_description():
     ld.add_action(static_tf_node)
     #ld.add_action(safety_node)
     ld.add_action(pure_pursuit_node)
+    ld.add_action(trailing_controller_node)
     # ld.add_action(csv_pp_node)
     
     ld.add_action(DeclareLaunchArgument('auto_start', default_value='true'))
