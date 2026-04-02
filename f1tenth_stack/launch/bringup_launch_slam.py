@@ -105,6 +105,12 @@ def generate_launch_description():
         name='joy_teleop',
         parameters=[LaunchConfiguration('joy_config')]
     )
+    joy_slam_capping_node = Node(
+        package='joystick_converter',
+        executable='joy_slam_capping_node',
+        name='joy_slam_capping_node',
+        parameters=[{'max_speed':0.8}]
+    )
     ackermann_to_vesc_node = Node(
         package='vesc_ackermann',
         executable='ackermann_to_vesc_node',
@@ -207,9 +213,9 @@ def generate_launch_description():
     # ld.add_action(throttle_interpolator_node)
     ld.add_action(ackermann_mux_node)
     ld.add_action(static_tf_node)
-    ld.add_action(converter_node)
-    ld.add_action(safety_node)
-    
+    # ld.add_action(converter_node)
+    # ld.add_action(safety_node)
+    ld.add_action(joy_slam_capping_node)
     ld.add_action(DeclareLaunchArgument('auto_start', default_value='true'))
     ld.add_action(DeclareLaunchArgument('node_name', default_value='urg_node2'))
     ld.add_action(DeclareLaunchArgument('scan_topic_name', default_value='scan'))

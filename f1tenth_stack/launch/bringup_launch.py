@@ -79,7 +79,7 @@ def generate_launch_description():
         'config',
         'nav2_amcl.yaml'
     )
-    pure_pursuit_config = os.path.join(get_package_share_directory("pure_pursuit"), "config", "params_solo.yaml")
+    pure_pursuit_config = os.path.join(get_package_share_directory("pure_pursuit"), "config", "params.yaml")
     csv_config = os.path.join(get_package_share_directory("trajectory_planning"), "config", "csv_pub_config_solo.yaml")
     trailing_controller_config = os.path.join(get_package_share_directory("trailing_controller"), "config", "trailing_controller_params.yaml")
     
@@ -279,8 +279,8 @@ def generate_launch_description():
     ld.add_action(static_tf_node)
     #ld.add_action(safety_node)
     ld.add_action(pure_pursuit_node)
-    ld.add_action(trailing_controller_node)
-    # ld.add_action(csv_pp_node)
+    # ld.add_action(trailing_controller_node)
+    ld.add_action(csv_pp_node)
     
     ld.add_action(DeclareLaunchArgument('auto_start', default_value='true'))
     ld.add_action(DeclareLaunchArgument('node_name', default_value='urg_node2'))

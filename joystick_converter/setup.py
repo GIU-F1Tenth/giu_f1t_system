@@ -22,6 +22,7 @@ setup(
         'console_scripts': [
             "joystick_converter_node = joystick_converter.joystick_converter_node:main",
             "joystick_converter_consumer_node = joystick_converter.joystick_converter_consumer_node:main",
+            "joy_slam_capping_node = joystick_converter.joy_slam_capping_node:main"
         ],
     },
 )
