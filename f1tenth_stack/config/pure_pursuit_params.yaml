@@ -1,0 +1,38 @@
+pure_pursuit_node:
+  ros__parameters:
+    # Lookahead Distance Parameters
+    max_lookahead_distance: 2.0 # Maximum lookahead distance in meters
+    min_lookahead_distance: 0.66 # Minimum lookahead distance in meters
+
+    # Velocity Control Parameters
+    max_velocity: 4.7 # Maximum allowed velocity in m/s
+    min_velocity: 2.2 # Minimum allowed velocity in m/s
+    vel_division_factor: 1.0 # Factor to reduce velocity commands
+    skidding_velocity_thresh: 0.3 # Velocity threshold to prevent skidding
+
+    # Control Parameters
+    kp: 0.45 # Proportional gain for steering control
+    kd: 1.2 # Derivative gain for steering control
+    k_sigmoid: 8.0 # Sigmoid steepness for velocity control
+
+    # Topic Names
+    cmd_vel_topic: "/drive" # Ackermann drive command topic
+    odometry_topic: "/odom" # Odometry topic for vehicle pose
+    joy_topic: "/joy" # Joystick topic for manual tuning
+    pause_topic: "/pause" # Emergency pause topic
+    path_topic: "/pp_path" # Topic for the selected path
+    tf_target: "map"
+    tf_source: "base_link"
+
+    # Timer and Processing Parameters
+    control_frequency: 200.0 # Control loop frequency in Hz (1/timer_period)
+    tf_timeout: 0.5 # Transform lookup timeout in seconds
+    marker_resolution: 60 # Circle marker resolution for visualization
+
+    # Queue Sizes
+    subscriber_queue_size: 10 # ROS subscriber queue size
+    publisher_queue_size: 10 # ROS publisher queue size
+
+    # Speed capping
+    enable_speed_capping: false # Enable or disable speed capping
+    speed_capping_topic: "/speed_capping" # Topic to receive speed capping commands

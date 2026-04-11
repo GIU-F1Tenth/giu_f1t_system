@@ -2,33 +2,34 @@ from setuptools import setup
 import os
 from glob import glob
 
-package_name = 'f1tenth_stack'
+package_name = "f1tenth_stack"
 
 setup(
     name=package_name,
-    version='0.0.1',
+    version="0.0.1",
     packages=[package_name],
     data_files=[
-        ('share/ament_index/resource_index/packages',
-            ['resource/' + package_name]),
-        ('share/' + package_name, ['package.xml']),
-        (os.path.join('share', package_name, 'launch'), glob('launch/*.py')),
-        (os.path.join('share', package_name, 'config'), glob('config/*.yaml')),
-        (os.path.join('share', package_name, 'config'), glob('config/*.png')),
+        ("share/ament_index/resource_index/packages", ["resource/" + package_name]),
+        ("share/" + package_name, ["package.xml"]),
+        (os.path.join("share", package_name, "launch"), glob("launch/*.py")),
+        (os.path.join("share", package_name, "config"), glob("config/*.yaml")),
+        (os.path.join("share", package_name, "maps"), glob("maps/*.png")),
+        (os.path.join("share", package_name, "maps"), glob("maps/*.pgm")),
+        (os.path.join("share", package_name, "maps"), glob("maps/*.yaml")),
     ],
-    install_requires=['setuptools'],
+    install_requires=["setuptools"],
     zip_safe=True,
-    maintainer='Hongrui Zheng',
-    maintainer_email='billyzheng.bz@gmail.com',
-    description='Onboard drivers for vesc and sensors for F1TENTH vehicles.',
-    license='MIT',
-    tests_require=['pytest'],
+    maintainer="Hongrui Zheng",
+    maintainer_email="billyzheng.bz@gmail.com",
+    description="Onboard drivers for vesc and sensors for F1TENTH vehicles.",
+    license="MIT",
+    tests_require=["pytest"],
     entry_points={
-        'console_scripts': [
-            'throttle_interpolator = f1tenth_stack.throttle_interpolator:main',
-            'tf_publisher = f1tenth_stack.tf_publisher:main',
-            'lap_time_node = f1tenth_stack.lap_timer_node:main',
-            'costmap_reset_node = f1tenth_stack.costmap_reset_node:main',
+        "console_scripts": [
+            "throttle_interpolator = f1tenth_stack.throttle_interpolator:main",
+            "tf_publisher = f1tenth_stack.tf_publisher:main",
+            "lap_time_node = f1tenth_stack.lap_timer_node:main",
+            "costmap_reset_node = f1tenth_stack.costmap_reset_node:main",
         ],
     },
 )
