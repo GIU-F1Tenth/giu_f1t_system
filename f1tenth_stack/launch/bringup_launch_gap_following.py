@@ -45,7 +45,7 @@ def generate_launch_description():
     mux_config = os.path.join(f1tenth_stack_dir, "config", "mux.yaml")
     urg_config = os.path.join(f1tenth_stack_dir, "config", "params_ether.yaml")
     gap_follower_config = os.path.join(
-        f1tenth_stack_dir, "config", "gap_follow_config.yaml"
+        f1tenth_stack_dir, "config", "gap_follower_config.yaml"
     )
 
     vesc_la = DeclareLaunchArgument(
