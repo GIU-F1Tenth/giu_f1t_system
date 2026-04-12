@@ -44,7 +44,7 @@ def generate_launch_description():
     sensors_config = os.path.join(f1tenth_stack_dir, "config", "sensors.yaml")
     mux_config = os.path.join(f1tenth_stack_dir, "config", "mux.yaml")
     urg_config = os.path.join(f1tenth_stack_dir, "config", "params_ether.yaml")
-    map_server_config = os.path.join(f1tenth_stack_dir, "config", "map.yaml")
+    map_server_config = os.path.join(f1tenth_stack_dir, "maps", "map.yaml")
     amcl_config = os.path.join(f1tenth_stack_dir, "config", "nav2_amcl.yaml")
     pure_pursuit_config = os.path.join(
         f1tenth_stack_dir, "config", "pure_pursuit_params.yaml"
