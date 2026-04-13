@@ -1,0 +1,55 @@
+# Horizon Mapper Configuration
+
+horizon_mapper_node:
+  ros__parameters:
+    # Logging
+    enable_logging: true
+    enable_debugging: false
+
+    # Horizon parameters
+    horizon_N: 40 # Number of prediction steps
+    horizon_T: 0.05 # Time horizon (seconds)
+
+    # Vehicle parameters
+    wheelbase: 0.33 # Vehicle wheelbase (meters)
+    max_steering_angle: 0.9 # Maximum steering angle (radians)
+    min_speed: 0.1 # Minimum velocity (m/s)
+
+    # Path Source: set use_csv_path to true to load from CSV file instead of subscribing to a topic
+    # csv_input_path should point to generated optimal trajectory input.
+    use_csv_path: true
+    csv_input_path: "optimal_trajectory.csv"
+    csv_output_path: "ref_trajectory.csv"
+
+    # Input Topics
+    odom_topic: "/odom"
+    scan_topic: "/scan"
+    initialpose_topic: "/initialpose"
+    path_topic: "/path"
+    left_boundary_topic: "/left_boundary"
+    right_boundary_topic: "/right_boundary"
+    horizon_topic: "ctrl/dynamic/horizon_n"
+    bound_adjustment_topic: "/ctrl/bound_adjustments" 
+
+    # Output Topics
+    reference_path_topic: "/path_planner/horizon_mapper/reference_path"
+    reference_trajectory_topic: "/horizon_mapper/reference_trajectory"
+    status_topic: "/horizon_mapper/path_ready"
+    constrained_trajectory_topic: "/horizon_mapper/constrained_trajectory"
+    constraint_status_topic: "/horizon_mapper/constraint_status"
+
+    # QoS
+    qos_depth: 10
+
+    # Advanced Mode Settings
+    default_left_bound: 1.0 
+    default_right_bound: 1.0 
+    default_confidence: 0.8  
+    adaptive_bounds: true   
+
+    # Visualization
+    publish_visualization: false
+    corridor_viz_topic: "/horizon_mapper/corridor_visualization"
+    velocity_viz_topic: "/horizon_mapper/velocity_path" 
+    velocity_color_scale: 10.0 
+    map_frame: "map"          
