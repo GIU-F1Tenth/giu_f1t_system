@@ -45,19 +45,29 @@ def generate_launch_description():
     sensors_config = os.path.join(f1tenth_stack_dir, "config", "sensors.yaml")
     mux_config = os.path.join(f1tenth_stack_dir, "config", "mux.yaml")
     urg_config = os.path.join(f1tenth_stack_dir, "config", "params_ether.yaml")
-    map_server_config = os.path.join(f1tenth_stack_dir, "config", "map.yaml")
+    map_server_config = os.path.join(f1tenth_stack_dir, "maps", "map.yaml")
     gap_follower_config = os.path.join(
-        f1tenth_stack_dir, "config", "gap_follow_config.yaml"
+        f1tenth_stack_dir, "config", "gap_follower_config.yaml"
     )
     amcl_config = os.path.join(f1tenth_stack_dir, "config", "nav2_amcl.yaml")
     pure_pursuit_config = os.path.join(
         f1tenth_stack_dir, "config", "pure_pursuit_params.yaml"
     )
-    csv_config = os.path.join(f1tenth_stack_dir, "config", "csv_pub_config_solo.yaml")
+    csv_config = os.path.join(f1tenth_stack_dir, "config", "csv_path_pub.yaml")
     trailing_controller_config = os.path.join(
         f1tenth_stack_dir,
         "config",
         "trailing_controller_params.yaml",
+    )
+    control_gateway_config = os.path.join(
+        f1tenth_stack_dir,
+        "config",
+        "control_gateway_params.yaml",
+    )
+    teleop_switcher_config = os.path.join(
+        f1tenth_stack_dir,
+        "config",
+        "teleop_switcher_params.yaml",
     )
 
     joy_la = DeclareLaunchArgument(
@@ -85,11 +95,11 @@ def generate_launch_description():
         default_value=urg_config,
         description="Descriptions for urg config",
     )
-    # gap_follower_la = DeclareLaunchArgument(
-    #     'gap_follower_config',
-    #     default_value=gap_follower_config,
-    #     description='Descriptions for gap follower config'
-    # )
+    gap_follower_la = DeclareLaunchArgument(
+        'gap_follower_config',
+        default_value=gap_follower_config,
+        description='Descriptions for gap follower config'
+    )
     amcl_la = DeclareLaunchArgument(
         "amcl_config",
         default_value=amcl_config,
@@ -110,7 +120,17 @@ def generate_launch_description():
         default_value=trailing_controller_config,
         description="Descriptions for trailing controller config",
     )
-
+    control_gateway_la = DeclareLaunchArgument(
+        "control_gateway_config",
+        default_value=control_gateway_config,
+        description="Descriptions for control gateway config",
+    )
+    teleop_switcher_la = DeclareLaunchArgument(
+        "teleop_switcher_config",
+        default_value=teleop_switcher_config,
+        description="Descriptions for teleop switcher config",
+    )
+    
     ld = LaunchDescription(
         [
             joy_la,
@@ -122,6 +142,9 @@ def generate_launch_description():
             pure_pursuit_la,
             csv_pp_la,
             trailing_controller_la,
+            gap_follower_la,
+            control_gateway_la,
+            teleop_switcher_la
         ]
     )
 
@@ -139,8 +162,8 @@ def generate_launch_description():
         output="screen",
     )
     csv_pp_node = Node(
-        package="trajectory_planning",
-        executable="csv_pub_exe",
+        package="pure_pursuit",
+        executable="csv_path_pub",
         name="csv_path_pub",
         parameters=[csv_config],
         output="screen",
@@ -201,6 +224,12 @@ def generate_launch_description():
         parameters=[LaunchConfiguration("amcl_config")],
         namespace="",
     )
+    gap_following_node = Node(
+        package='gap_follower',
+        executable='steering_speed_exe',
+        name='gap_steering_node',
+        parameters=[gap_follower_config]
+    )
     trailing_controller_node = Node(
         package="trailing_controller",
         executable="trailing_controller_node",
@@ -252,19 +281,32 @@ def generate_launch_description():
         ),
         condition=IfCondition(LaunchConfiguration("auto_start")),
     )
+    control_gateway_node = Node(
+        package="control_gateway",
+        executable="control_gateway",
+        name="control_gateway",
+        parameters=[control_gateway_config],
+    )
+    teleop_switcher_node = Node(
+        package="control_gateway",
+        executable="teleop_switcher",
+        name="teleop_switcher",
+        parameters=[teleop_switcher_config],
+    ) 
 
     # finalize
     ld.add_action(joy_teleop_node)
     ld.add_action(ackermann_to_vesc_node)
     ld.add_action(vesc_to_odom_node)
     ld.add_action(vesc_driver_node)
-    # ld.add_action(throttle_interpolator_node)
     ld.add_action(ackermann_mux_node)
     ld.add_action(static_tf_node)
-    # ld.add_action(safety_node)
     ld.add_action(pure_pursuit_node)
     # ld.add_action(trailing_controller_node)
     ld.add_action(csv_pp_node)
+    ld.add_action(gap_following_node)
+    ld.add_action(control_gateway_node)
+    ld.add_action(teleop_switcher_node)
 
     ld.add_action(DeclareLaunchArgument("auto_start", default_value="true"))
     ld.add_action(DeclareLaunchArgument("node_name", default_value="urg_node2"))
