@@ -50,6 +50,17 @@ def generate_launch_description():
         f1tenth_stack_dir, "config", "pure_pursuit_params.yaml"
     )
     csv_config = os.path.join(f1tenth_stack_dir, "config", "csv_path_pub.yaml")
+    joy_teleop_config = os.path.join(f1tenth_stack_dir, "config", "joy_teleop.yaml")
+    control_gateway_config = os.path.join(
+        f1tenth_stack_dir,
+        "config",
+        "control_gateway_params.yaml",
+    )
+    teleop_switcher_config = os.path.join(
+        f1tenth_stack_dir,
+        "config",
+        "teleop_switcher_params.yaml",
+    )
 
     vesc_la = DeclareLaunchArgument(
         "vesc_config",
@@ -86,6 +97,16 @@ def generate_launch_description():
         default_value=csv_config,
         description="Descriptions for csv config",
     )
+    control_gateway_la = DeclareLaunchArgument(
+        "control_gateway_config",
+        default_value=control_gateway_config,
+        description="Descriptions for control gateway config",
+    )
+    teleop_switcher_la = DeclareLaunchArgument(
+        "teleop_switcher_config",
+        default_value=teleop_switcher_config,
+        description="Descriptions for teleop switcher config",
+    )
 
     ld = LaunchDescription(
         [
@@ -96,6 +117,8 @@ def generate_launch_description():
             amcl_la,
             pure_pursuit_la,
             csv_pp_la,
+            control_gateway_la,
+            teleop_switcher_la
         ]
     )
 
@@ -214,6 +237,18 @@ def generate_launch_description():
         ),
         condition=IfCondition(LaunchConfiguration("auto_start")),
     )
+    control_gateway_node = Node(
+        package="control_gateway",
+        executable="control_gateway",
+        name="control_gateway",
+        parameters=[control_gateway_config],
+    )
+    teleop_switcher_node = Node(
+        package="control_gateway",
+        executable="teleop_switcher",
+        name="teleop_switcher",
+        parameters=[teleop_switcher_config],
+    )
 
     # finalize
     ld.add_action(ackermann_to_vesc_node)
@@ -223,6 +258,8 @@ def generate_launch_description():
     ld.add_action(static_tf_node)
     ld.add_action(pure_pursuit_node)
     ld.add_action(csv_pp_node)
+    ld.add_action(control_gateway_node)
+    ld.add_action(teleop_switcher_node)
 
     ld.add_action(DeclareLaunchArgument("auto_start", default_value="true"))
     ld.add_action(DeclareLaunchArgument("node_name", default_value="urg_node2"))

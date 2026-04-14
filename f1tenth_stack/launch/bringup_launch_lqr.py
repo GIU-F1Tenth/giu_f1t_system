@@ -55,6 +55,11 @@ def generate_launch_description():
         "config",
         "control_gateway_params.yaml",
     )
+    teleop_switcher_config = os.path.join(
+        f1tenth_stack_dir,
+        "config",
+        "teleop_switcher_params.yaml",
+    )
 
     joy_la = DeclareLaunchArgument(
         "joy_config",
@@ -111,6 +116,11 @@ def generate_launch_description():
         default_value=control_gateway_config,
         description="Descriptions for control gateway config",
     )
+    teleop_switcher_la = DeclareLaunchArgument(
+        "teleop_switcher_config",
+        default_value=teleop_switcher_config,
+        description="Descriptions for teleop switcher config",
+    )
   
     
     ld = LaunchDescription(
@@ -126,6 +136,7 @@ def generate_launch_description():
             enable_lqr_la,
             enable_horizon_mapper_la,
             control_gateway_la,
+            teleop_switcher_la
         ]
     )
 
@@ -253,6 +264,12 @@ def generate_launch_description():
         name="control_gateway",
         parameters=[control_gateway_config],
     )
+    teleop_switcher_node = Node(
+        package="control_gateway",
+        executable="teleop_switcher",
+        name="teleop_switcher",
+        parameters=[teleop_switcher_config],
+    )
     lqr_controller_node = Node(
         package='lqr_controller',
         executable='lqr_node',
@@ -267,6 +284,7 @@ def generate_launch_description():
         parameters=[horizon_mapper_config],
         emulate_tty=True, 
     )
+    
 
     # finalize
     ld.add_action(joy_teleop_node)
@@ -276,6 +294,7 @@ def generate_launch_description():
     ld.add_action(ackermann_mux_node)
     ld.add_action(static_tf_node)
     ld.add_action(control_gateway_node)
+    ld.add_action(teleop_switcher_node)
     #ld.add_action(lqr_controller_node)
     ld.add_action(horizon_mapper_node)
 

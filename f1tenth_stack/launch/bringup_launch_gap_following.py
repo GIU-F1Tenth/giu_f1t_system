@@ -40,6 +40,7 @@ from lifecycle_msgs.msg import Transition
 
 def generate_launch_description():
     f1tenth_stack_dir = get_package_share_directory("f1tenth_stack")
+    joy_teleop_config = os.path.join(f1tenth_stack_dir, "config", "joy_teleop.yaml")
     vesc_config = os.path.join(f1tenth_stack_dir, "config", "vesc.yaml")
     sensors_config = os.path.join(f1tenth_stack_dir, "config", "sensors.yaml")
     mux_config = os.path.join(f1tenth_stack_dir, "config", "mux.yaml")
@@ -58,6 +59,11 @@ def generate_launch_description():
         "teleop_switcher_params.yaml",
     )
 
+    joy_la = DeclareLaunchArgument(
+        "joy_config",
+        default_value=joy_teleop_config,
+        description="Descriptions for joy and joy_teleop configs",
+    )
     vesc_la = DeclareLaunchArgument(
         "vesc_config",
         default_value=vesc_config,
@@ -102,10 +108,17 @@ def generate_launch_description():
             urg_la,
             gap_follower_la,
             control_gateway_la,
-            teleop_switcher_la
+            teleop_switcher_la,
+            joy_la
         ]
     )
 
+    joy_teleop_node = Node(
+        package="joy_teleop",
+        executable="joy_teleop",
+        name="joy_teleop",
+        parameters=[LaunchConfiguration("joy_config")],
+    )
     gap_follower_node = Node(
         package="gap_follower",
         executable="steering_speed_exe",
@@ -199,6 +212,7 @@ def generate_launch_description():
     )
 
     # finalize
+    ld.add_action(joy_teleop_node)
     ld.add_action(ackermann_to_vesc_node)
     ld.add_action(vesc_to_odom_node)
     ld.add_action(vesc_driver_node)
