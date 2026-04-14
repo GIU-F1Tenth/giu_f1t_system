@@ -48,7 +48,7 @@ horizon_mapper_node:
     adaptive_bounds: true   
 
     # Visualization
-    publish_visualization: false
+    publish_visualization: true
     corridor_viz_topic: "/horizon_mapper/corridor_visualization"
     velocity_viz_topic: "/horizon_mapper/velocity_path" 
     velocity_color_scale: 10.0 

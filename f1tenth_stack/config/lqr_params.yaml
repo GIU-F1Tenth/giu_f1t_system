@@ -8,17 +8,17 @@ adaptive_lqr_controller_node:
     dt: 0.02
 
     # Control Limits
-    max_acceleration: 2.5
-    max_deceleration: 9.0
-    max_steering_angle: 1.2
-    min_speed: 1.5
-    max_speed: 15.0
+    max_acceleration: 1.0
+    max_deceleration: 5.0
+    max_steering_angle: 0.8
+    min_speed: 0.8
+    max_speed: 1.2
 
     # Base LQR Weights (starting points for adaptation)
     adaptive.base_position_weight: 3.0
-    adaptive.base_velocity_weight: 1.0
+    adaptive.base_velocity_weight: 0.3
     adaptive.base_heading_weight: 6.4
-    adaptive.base_acceleration_weight: 0.3
+    adaptive.base_acceleration_weight: 1.3
     adaptive.base_steering_weight: 4.3
       
     # Adaptation Parameters
@@ -42,7 +42,7 @@ adaptive_lqr_controller_node:
     adaptive.moderate_curvature_threshold: 0.5
 
     # Safety Monitor Parameters
-    safety.enable_safety_monitor: false
+    safety.enable_safety_monitor: true
     safety.min_obstacle_distance: 0.3          # Minimum safe distance [m]
     safety.emergency_brake_distance: 0.3       # Emergency brake distance [m]
     safety.collision_check_angle: 45.0         # Angle range to check [degrees]
@@ -55,8 +55,8 @@ adaptive_lqr_controller_node:
     safety.min_safe_speed: 1.4                 # Minimum safe speed [m/s]
 
     # Control Parameters
-    control_hz: 30.0
-    lookahead_distance: 1.3
+    control_hz: 150.0
+    lookahead_distance: 0.9
     enable_feedforward: true
 
     # Anti-Wobble Parameters
@@ -67,13 +67,13 @@ adaptive_lqr_controller_node:
     max_steering_rate: 1.2
 
     # Curve Detection
-    enable_curve_detection: false
+    enable_curve_detection: true
     curve_lookahead_points: 5
     max_curvature_threshold: 1.0
     curve_speed_factor: 0.7
 
     # Safety Parameters
-    enable_safety_checks: false 
+    enable_safety_checks: true 
     safety_timeout: 1.0
     emergency_brake_threshold: 1.4
 
@@ -87,6 +87,6 @@ adaptive_lqr_controller_node:
 
     # QoS and Logging
     qos_depth: 10
-    debug: true
+    debug: false
     performance_logging_enabled: true
     log_frequency_divider: 10
