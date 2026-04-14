@@ -49,9 +49,7 @@ def generate_launch_description():
     amcl_config = os.path.join(f1tenth_stack_dir, "config", "nav2_amcl.yaml")
     lqr_config = os.path.join(f1tenth_stack_dir, "config", "lqr_params.yaml")
     horizon_mapper_config = os.path.join(f1tenth_stack_dir, "config", "horizon_mapper.yaml")
-    lqr_launch_file = os.path.join(
-        get_package_share_directory("lqr_controller"), "launch", "lqr_controller.launch.py"
-    )
+    lqr_config = os.path.join(f1tenth_stack_dir, "config", "lqr_params.yaml")
     control_gateway_config = os.path.join(
         f1tenth_stack_dir,
         "config",
@@ -131,14 +129,6 @@ def generate_launch_description():
         ]
     )
 
-    lqr_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(lqr_launch_file),
-        launch_arguments={
-            "config_file": LaunchConfiguration("lqr_config"),
-            "horizon_config_file": LaunchConfiguration("horizon_mapper_config"),
-        }.items(),
-        condition=IfCondition(LaunchConfiguration("enable_lqr")),
-    )
 
     horizon_mapper_launch = Node(
         package="horizon_mapper",
@@ -263,6 +253,20 @@ def generate_launch_description():
         name="control_gateway",
         parameters=[control_gateway_config],
     )
+    lqr_controller_node = Node(
+        package='lqr_controller',
+        executable='lqr_node',
+        name='adaptive_lqr_controller_node',
+        parameters=[lqr_config],
+        emulate_tty=True,
+    )
+    horizon_mapper_node = Node(
+        package='horizon_mapper',
+        executable='horizon_mapper_node',
+        name='horizon_mapper_node',
+        parameters=[horizon_mapper_config],
+        emulate_tty=True, 
+    )
 
     # finalize
     ld.add_action(joy_teleop_node)
@@ -272,6 +276,8 @@ def generate_launch_description():
     ld.add_action(ackermann_mux_node)
     ld.add_action(static_tf_node)
     ld.add_action(control_gateway_node)
+    #ld.add_action(lqr_controller_node)
+    ld.add_action(horizon_mapper_node)
 
     ld.add_action(DeclareLaunchArgument("auto_start", default_value="true"))
     ld.add_action(DeclareLaunchArgument("node_name", default_value="urg_node2"))
@@ -282,7 +288,6 @@ def generate_launch_description():
     ld.add_action(map_server_node)
     ld.add_action(amcl_node)
     ld.add_action(lifecycle_manager_node)
-    ld.add_action(lqr_launch)
     ld.add_action(horizon_mapper_launch)
 
     return ld
