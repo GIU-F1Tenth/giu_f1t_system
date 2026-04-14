@@ -4,6 +4,6 @@ teleop_switcher:
     selector_topic: "/control_selector"
     manual_controller_name: "teleop"
 
-    swap_list: ["teleop", "pure_pursuit", "gap_following"]
+    controllers: ["lqr", "gap_following", "pure_pursuit", "teleop"]
 
     manual_button_index: 1

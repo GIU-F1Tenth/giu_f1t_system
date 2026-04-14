@@ -11,7 +11,7 @@ joy_teleop:
     default:
       type: topic
       interface_type: ackermann_msgs/msg/AckermannDriveStamped
-      topic_name: teleop
+      topic_name: /teleop/drive
       axis_mappings:
         drive-speed:
           axis: 1
@@ -25,7 +25,7 @@ joy_teleop:
     human_control:
       type: topic
       interface_type: ackermann_msgs/msg/AckermannDriveStamped
-      topic_name: teleop
+      topic_name: /teleop/drive
       deadman_buttons: [4]
       axis_mappings:
         drive-speed:
