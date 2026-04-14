@@ -50,7 +50,8 @@ def generate_launch_description():
         f1tenth_stack_dir, "config", "pure_pursuit_params.yaml"
     )
     csv_config = os.path.join(f1tenth_stack_dir, "config", "csv_path_pub.yaml")
-    joy_teleop_config = os.path.join(f1tenth_stack_dir, "config", "joy_teleop.yaml")
+    joy_teleop_config = os.path.join(
+        f1tenth_stack_dir, "config", "joy_teleop.yaml")
     control_gateway_config = os.path.join(
         f1tenth_stack_dir,
         "config",
@@ -107,6 +108,11 @@ def generate_launch_description():
         default_value=teleop_switcher_config,
         description="Descriptions for teleop switcher config",
     )
+    joy_la = DeclareLaunchArgument(
+        "joy_config",
+        default_value=joy_teleop_config,
+        description="Descriptions for joy and joy_teleop configs",
+    )
 
     ld = LaunchDescription(
         [
@@ -118,10 +124,17 @@ def generate_launch_description():
             pure_pursuit_la,
             csv_pp_la,
             control_gateway_la,
-            teleop_switcher_la
+            teleop_switcher_la,
+            joy_la
         ]
     )
 
+    joy_teleop_node = Node(
+        package="joy_teleop",
+        executable="joy_teleop",
+        name="joy_teleop",
+        parameters=[LaunchConfiguration("joy_config")],
+    )
     pure_pursuit_node = Node(
         package="pure_pursuit",
         executable="pure_pursuit_node",
@@ -174,7 +187,8 @@ def generate_launch_description():
         package="tf2_ros",
         executable="static_transform_publisher",
         name="static_baselink_to_laser",
-        arguments=["0.27", "0.0", "0.11", "0.0", "0.0", "0.0", "base_link", "laser"],
+        arguments=["0.27", "0.0", "0.11", "0.0",
+                   "0.0", "0.0", "base_link", "laser"],
     )
     map_server_node = LifecycleNode(
         package="nav2_map_server",
@@ -260,10 +274,13 @@ def generate_launch_description():
     ld.add_action(csv_pp_node)
     ld.add_action(control_gateway_node)
     ld.add_action(teleop_switcher_node)
+    ld.add_action(joy_teleop_node)
 
     ld.add_action(DeclareLaunchArgument("auto_start", default_value="true"))
-    ld.add_action(DeclareLaunchArgument("node_name", default_value="urg_node2"))
-    ld.add_action(DeclareLaunchArgument("scan_topic_name", default_value="scan"))
+    ld.add_action(DeclareLaunchArgument(
+        "node_name", default_value="urg_node2"))
+    ld.add_action(DeclareLaunchArgument(
+        "scan_topic_name", default_value="scan"))
     ld.add_action(urg_node)
     ld.add_action(urg_node2_node_configure_event_handler)
     ld.add_action(urg_node2_node_activate_event_handler)
