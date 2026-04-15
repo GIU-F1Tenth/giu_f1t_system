@@ -6,7 +6,7 @@ control_gateway:
 
     enable_button_index: 4
 
-    controllers: ["lqr", "gap_following", "pure_pursuit", "teleop"]
+    controllers: ["lqr", "gap_following", "pure_pursuit", "teleop", "dwa"]
 
     default_controller: "lqr"
 
@@ -14,3 +14,4 @@ control_gateway:
     controller_pure_pursuit_output_topic: "/pp/drive"
     controller_gap_following_output_topic: "/gap_following/drive"
     controller_lqr_output_topic: "/lqr/drive"
+    controller_dwa_output_topic: "/dwa/drive"
