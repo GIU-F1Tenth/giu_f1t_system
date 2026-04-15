@@ -143,7 +143,7 @@ def generate_launch_description():
         output="screen",
     )
     csv_pp_node = Node(
-        package="pure_pursuit",
+        package="trajectory_planning",
         executable="csv_path_pub",
         name="csv_path_pub",
         parameters=[csv_config],
