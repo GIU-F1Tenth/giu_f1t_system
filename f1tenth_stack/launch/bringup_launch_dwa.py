@@ -147,7 +147,7 @@ def generate_launch_description():
     dwa_node = Node(
         package="overtaking",
         executable="dwa_exe",
-        name="dynamic_lookahead_pub_node",
+        name="dwa_ackermann_node",
         parameters=[dwa_config],
     )
     csv_pp_node = Node(
