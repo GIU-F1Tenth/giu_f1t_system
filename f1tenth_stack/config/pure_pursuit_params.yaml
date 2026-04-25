@@ -22,7 +22,7 @@ pure_pursuit_node:
     pause_topic: "/pause" # Emergency pause topic
     path_topic: "/pp_path" # Topic for the selected path
     tf_target: "map"
-    tf_source: "base_link"
+    tf_source: "ego_racecar/base_link"
 
     # Timer and Processing Parameters
     control_frequency: 200.0 # Control loop frequency in Hz (1/timer_period)
