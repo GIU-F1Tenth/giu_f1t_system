@@ -187,12 +187,12 @@ def generate_launch_description():
         name="vesc_to_odom_node",
         parameters=[LaunchConfiguration("vesc_config")],
     )
-    # vesc_driver_node = Node(
-    #     package="vesc_driver",
-    #     executable="vesc_driver_node",
-    #     name="vesc_driver_node",
-    #     parameters=[LaunchConfiguration("vesc_config")],
-    # )
+    vesc_driver_node = Node(
+        package="vesc_driver",
+        executable="vesc_driver_node",
+        name="vesc_driver_node",
+        parameters=[LaunchConfiguration("vesc_config")],
+    )
     urg_node = LifecycleNode(
         package="urg_node2",
         executable="urg_node2_node",
@@ -311,7 +311,7 @@ def generate_launch_description():
     ld.add_action(joy_teleop_node)
     ld.add_action(ackermann_to_vesc_node)
     ld.add_action(vesc_to_odom_node)
-    # ld.add_action(vesc_driver_node)
+    ld.add_action(vesc_driver_node)
     ld.add_action(ackermann_mux_node)
     ld.add_action(static_tf_node)
     ld.add_action(pure_pursuit_node)
