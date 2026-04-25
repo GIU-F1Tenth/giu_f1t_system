@@ -40,8 +40,7 @@ from lifecycle_msgs.msg import Transition
 
 def generate_launch_description():
     f1tenth_stack_dir = get_package_share_directory("f1tenth_stack")
-    joy_teleop_config = os.path.join(
-        f1tenth_stack_dir, "config", "joy_teleop.yaml")
+    joy_teleop_config = os.path.join(f1tenth_stack_dir, "config", "joy_teleop.yaml")
     vesc_config = os.path.join(f1tenth_stack_dir, "config", "vesc.yaml")
     sensors_config = os.path.join(f1tenth_stack_dir, "config", "sensors.yaml")
     mux_config = os.path.join(f1tenth_stack_dir, "config", "mux.yaml")
@@ -98,9 +97,9 @@ def generate_launch_description():
         description="Descriptions for urg config",
     )
     gap_follower_la = DeclareLaunchArgument(
-        'gap_follower_config',
+        "gap_follower_config",
         default_value=gap_follower_config,
-        description='Descriptions for gap follower config'
+        description="Descriptions for gap follower config",
     )
     amcl_la = DeclareLaunchArgument(
         "amcl_config",
@@ -152,7 +151,7 @@ def generate_launch_description():
             gap_follower_la,
             control_gateway_la,
             teleop_switcher_la,
-            fsm_la
+            fsm_la,
         ]
     )
 
@@ -188,12 +187,12 @@ def generate_launch_description():
         name="vesc_to_odom_node",
         parameters=[LaunchConfiguration("vesc_config")],
     )
-    vesc_driver_node = Node(
-        package="vesc_driver",
-        executable="vesc_driver_node",
-        name="vesc_driver_node",
-        parameters=[LaunchConfiguration("vesc_config")],
-    )
+    # vesc_driver_node = Node(
+    #     package="vesc_driver",
+    #     executable="vesc_driver_node",
+    #     name="vesc_driver_node",
+    #     parameters=[LaunchConfiguration("vesc_config")],
+    # )
     urg_node = LifecycleNode(
         package="urg_node2",
         executable="urg_node2_node",
@@ -214,8 +213,7 @@ def generate_launch_description():
         package="tf2_ros",
         executable="static_transform_publisher",
         name="static_baselink_to_laser",
-        arguments=["0.27", "0.0", "0.11", "0.0",
-                   "0.0", "0.0", "base_link", "laser"],
+        arguments=["0.27", "0.0", "0.11", "0.0", "0.0", "0.0", "base_link", "laser"],
     )
     map_server_node = LifecycleNode(
         package="nav2_map_server",
@@ -234,10 +232,10 @@ def generate_launch_description():
         namespace="",
     )
     gap_following_node = Node(
-        package='gap_follower',
-        executable='steering_speed_exe',
-        name='gap_steering_node',
-        parameters=[gap_follower_config]
+        package="gap_follower",
+        executable="steering_speed_exe",
+        name="gap_steering_node",
+        parameters=[gap_follower_config],
     )
     trailing_controller_node = Node(
         package="trailing_controller",
@@ -313,7 +311,7 @@ def generate_launch_description():
     ld.add_action(joy_teleop_node)
     ld.add_action(ackermann_to_vesc_node)
     ld.add_action(vesc_to_odom_node)
-    ld.add_action(vesc_driver_node)
+    # ld.add_action(vesc_driver_node)
     ld.add_action(ackermann_mux_node)
     ld.add_action(static_tf_node)
     ld.add_action(pure_pursuit_node)
@@ -325,10 +323,8 @@ def generate_launch_description():
     ld.add_action(fsm_node)
 
     ld.add_action(DeclareLaunchArgument("auto_start", default_value="true"))
-    ld.add_action(DeclareLaunchArgument(
-        "node_name", default_value="urg_node2"))
-    ld.add_action(DeclareLaunchArgument(
-        "scan_topic_name", default_value="scan"))
+    ld.add_action(DeclareLaunchArgument("node_name", default_value="urg_node2"))
+    ld.add_action(DeclareLaunchArgument("scan_topic_name", default_value="scan"))
     ld.add_action(urg_node)
     ld.add_action(urg_node2_node_configure_event_handler)
     ld.add_action(urg_node2_node_activate_event_handler)
