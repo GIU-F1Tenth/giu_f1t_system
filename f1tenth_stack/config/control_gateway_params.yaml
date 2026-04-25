@@ -6,7 +6,12 @@ control_gateway:
 
     enable_button_index: 4
 
-    controllers: ["lqr", "gap_following", "pure_pursuit", "teleop", "dwa"]
+    controllers:
+      - lqr
+      - gap_following
+      - pure_pursuit
+      - teleop
+      - dwa
 
     default_controller: "lqr"
 

@@ -3,6 +3,10 @@ teleop_switcher:
     joy_topic: "/joy"
     selector_topic: "/control_selector"
 
-    controllers: ["lqr", "gap_following", "pure_pursuit", "teleop"]
+    controllers:
+      - lqr
+      - gap_following
+      - pure_pursuit
+      - teleop
 
     manual_button_index: 7
