@@ -70,6 +70,7 @@ def generate_launch_description():
         "config",
         "teleop_switcher_params.yaml",
     )
+    fsm_config = os.path.join(f1tenth_stack_dir, "config", "fsm_params.yaml")
 
     joy_la = DeclareLaunchArgument(
         "joy_config",
@@ -131,6 +132,11 @@ def generate_launch_description():
         default_value=teleop_switcher_config,
         description="Descriptions for teleop switcher config",
     )
+    fsm_la = DeclareLaunchArgument(
+        "fsm_config",
+        default_value=fsm_config,
+        description="Descriptions for fsm config",
+    )
 
     ld = LaunchDescription(
         [
@@ -145,7 +151,8 @@ def generate_launch_description():
             trailing_controller_la,
             gap_follower_la,
             control_gateway_la,
-            teleop_switcher_la
+            teleop_switcher_la,
+            fsm_la
         ]
     )
 
@@ -295,6 +302,12 @@ def generate_launch_description():
         name="teleop_switcher",
         parameters=[teleop_switcher_config],
     )
+    fsm_node = Node(
+        package="decision",
+        executable="fsm_node",
+        name="fsm_node",
+        parameters=[fsm_config],
+    )
 
     # finalize
     ld.add_action(joy_teleop_node)
@@ -309,6 +322,7 @@ def generate_launch_description():
     ld.add_action(gap_following_node)
     ld.add_action(control_gateway_node)
     ld.add_action(teleop_switcher_node)
+    ld.add_action(fsm_node)
 
     ld.add_action(DeclareLaunchArgument("auto_start", default_value="true"))
     ld.add_action(DeclareLaunchArgument(
