@@ -1,0 +1,11 @@
+trailing_controller:
+  ros__parameters:
+    kp: 0.5
+    kd: 0.2
+    target_gap: 1.0
+    control_rate: 50.0
+    path_topic: "/pp_path"
+    object_velocity_topic: "/object_velocities"
+    speed_cap_topic: "/speed_cap"
+    max_speed: 8.0
+    min_speed: 0.0
