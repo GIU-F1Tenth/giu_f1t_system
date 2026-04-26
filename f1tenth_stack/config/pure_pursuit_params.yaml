@@ -16,7 +16,7 @@ pure_pursuit_node:
     k_sigmoid: 8.0 # Sigmoid steepness for velocity control
 
     # Topic Names
-    cmd_vel_topic: "/pp/drive" # Ackermann drive command topic
+    cmd_vel_topic: "/pure_pursuit/drive" # Ackermann drive command topic
     odometry_topic: "/odom" # Odometry topic for vehicle pose
     joy_topic: "/joy" # Joystick topic for manual tuning
     pause_topic: "/control_selector" # Emergency pause topic
