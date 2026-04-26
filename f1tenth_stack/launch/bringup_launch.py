@@ -70,6 +70,9 @@ def generate_launch_description():
         "teleop_switcher_params.yaml",
     )
     fsm_config = os.path.join(f1tenth_stack_dir, "config", "fsm_params.yaml")
+    detection_config = os.path.join(
+        f1tenth_stack_dir, "config", "detection_config.yaml"
+    )
 
     joy_la = DeclareLaunchArgument(
         "joy_config",
@@ -136,6 +139,11 @@ def generate_launch_description():
         default_value=fsm_config,
         description="Descriptions for fsm config",
     )
+    detection_la = DeclareLaunchArgument(
+        "detection_config",
+        default_value=detection_config,
+        description="Descriptions for detection config",
+    )
 
     ld = LaunchDescription(
         [
@@ -152,6 +160,7 @@ def generate_launch_description():
             control_gateway_la,
             teleop_switcher_la,
             fsm_la,
+            detection_la,
         ]
     )
 
@@ -306,6 +315,13 @@ def generate_launch_description():
         name="fsm_node",
         parameters=[fsm_config],
     )
+    detection_node = Node(
+        package="obj_detection",
+        executable="detection_node",
+        name="object_detection",
+        parameters=[detection_config],
+        output="screen",
+    )
 
     # finalize
     ld.add_action(joy_teleop_node)
@@ -321,6 +337,7 @@ def generate_launch_description():
     ld.add_action(control_gateway_node)
     ld.add_action(teleop_switcher_node)
     ld.add_action(fsm_node)
+    ld.add_action(detection_node)
 
     ld.add_action(DeclareLaunchArgument("auto_start", default_value="true"))
     ld.add_action(DeclareLaunchArgument("node_name", default_value="urg_node2"))
