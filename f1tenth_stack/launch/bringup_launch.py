@@ -30,7 +30,7 @@ from ament_index_python.packages import get_package_share_directory
 import os
 from launch.conditions import IfCondition
 from launch_ros.actions import LifecycleNode
-from launch.actions import DeclareLaunchArgument, EmitEvent, RegisterEventHandler, TimerAction
+from launch.actions import DeclareLaunchArgument, EmitEvent, RegisterEventHandler
 from launch.event_handlers import OnProcessStart
 from launch.events import matches_action
 from launch_ros.event_handlers import OnStateTransition
@@ -265,44 +265,12 @@ def generate_launch_description():
             }
         ],
     )
-
-    urg_node2_node_configure_event_handler = RegisterEventHandler(
-        event_handler=OnProcessStart(
-            target_action=urg_node,
-            on_start=[
-                EmitEvent(
-                    event=ChangeState(
-                        lifecycle_node_matcher=matches_action(urg_node),
-                        transition_id=Transition.TRANSITION_CONFIGURE,
-                    ),
-                ),
-            ],
-        ),
-        condition=IfCondition(LaunchConfiguration("auto_start")),
-    )
-
-    urg_node2_node_activate_event_handler = RegisterEventHandler(
-        event_handler=OnStateTransition(
-            target_lifecycle_node=urg_node,
-            start_state="configuring",
-            goal_state="inactive",
-            entities=[
-                EmitEvent(
-                    event=ChangeState(
-                        lifecycle_node_matcher=matches_action(urg_node),
-                        transition_id=Transition.TRANSITION_ACTIVATE,
-                    ),
-                ),
-            ],
-        ),
-        condition=IfCondition(LaunchConfiguration("auto_start")),
-    )
-    control_gateway_node = TimerAction(period=10.0, actions=[Node(
+    control_gateway_node = Node(
         package="control_gateway",
         executable="control_gateway",
         name="control_gateway",
         parameters=[control_gateway_config],
-    )])
+    )
     teleop_switcher_node = Node(
         package="control_gateway",
         executable="teleop_switcher",
@@ -322,6 +290,49 @@ def generate_launch_description():
         parameters=[detection_config],
         output="screen",
     )
+    
+    pure_pursuit_start_handler = RegisterEventHandler(
+        event_handler=OnProcessStart(
+            target_action=pure_pursuit_node,
+            on_start=[gap_following_node, csv_pp_node],
+        )
+    )
+    gap_following_start_handler = RegisterEventHandler(
+        event_handler=OnProcessStart(
+            target_action=gap_following_node,
+            on_start=[control_gateway_node],
+        )
+    )
+    urg_node2_node_configure_event_handler = RegisterEventHandler(
+        event_handler=OnProcessStart(
+            target_action=urg_node,
+            on_start=[
+                EmitEvent(
+                    event=ChangeState(
+                        lifecycle_node_matcher=matches_action(urg_node),
+                        transition_id=Transition.TRANSITION_CONFIGURE,
+                    ),
+                ),
+            ],
+        ),
+        condition=IfCondition(LaunchConfiguration("auto_start")),
+    )
+    urg_node2_node_activate_event_handler = RegisterEventHandler(
+        event_handler=OnStateTransition(
+            target_lifecycle_node=urg_node,
+            start_state="configuring",
+            goal_state="inactive",
+            entities=[
+                EmitEvent(
+                    event=ChangeState(
+                        lifecycle_node_matcher=matches_action(urg_node),
+                        transition_id=Transition.TRANSITION_ACTIVATE,
+                    ),
+                ),
+            ],
+        ),
+        condition=IfCondition(LaunchConfiguration("auto_start")),
+    )
 
     # finalize
     ld.add_action(joy_teleop_node)
@@ -330,13 +341,13 @@ def generate_launch_description():
     ld.add_action(vesc_driver_node)
     ld.add_action(ackermann_mux_node)
     ld.add_action(static_tf_node)
-    ld.add_action(pure_pursuit_node)
     # ld.add_action(trailing_controller_node)
-    ld.add_action(csv_pp_node)
-    ld.add_action(gap_following_node)
     ld.add_action(teleop_switcher_node)
     ld.add_action(fsm_node)
     ld.add_action(detection_node)
+    ld.add_action(pure_pursuit_start_handler)
+    ld.add_action(gap_following_start_handler)
+    ld.add_action(pure_pursuit_node)
 
     ld.add_action(DeclareLaunchArgument("auto_start", default_value="true"))
     ld.add_action(DeclareLaunchArgument("node_name", default_value="urg_node2"))
@@ -347,6 +358,5 @@ def generate_launch_description():
     ld.add_action(map_server_node)
     ld.add_action(amcl_node)
     ld.add_action(lifecycle_manager_node)
-    ld.add_action(control_gateway_node)
 
     return ld
