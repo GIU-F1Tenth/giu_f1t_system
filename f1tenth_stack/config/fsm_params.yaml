@@ -4,5 +4,5 @@ fsm_node:
       - pure_pursuit
       - gap_following
     initial_state: pure_pursuit
-    objects_topic: objects
+    objects_topic: detected_objects
     output_topic: control_selector
