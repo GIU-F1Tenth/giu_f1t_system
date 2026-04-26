@@ -3,20 +3,7 @@ control_gateway:
     joy_topic: "/joy"
     selector_topic: "/control_selector"
     drive_topic: "/drive"
+    manual_auto_swap_topic: "/control_gateway/switch_manual_auto"
+    default_controller: "pure_pursuit"
 
     enable_button_index: 4
-
-    controllers:
-      - lqr
-      - gap_following
-      - pure_pursuit
-      - teleop
-      - dwa
-
-    default_controller: "lqr"
-
-    controller_teleop_output_topic: "/teleop/drive"
-    controller_pure_pursuit_output_topic: "/pp/drive"
-    controller_gap_following_output_topic: "/gap_following/drive"
-    controller_lqr_output_topic: "/lqr/drive"
-    controller_dwa_output_topic: "/dwa/drive"

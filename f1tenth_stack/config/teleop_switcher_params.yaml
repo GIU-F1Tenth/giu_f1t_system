@@ -1,12 +1,7 @@
 teleop_switcher:
   ros__parameters:
     joy_topic: "/joy"
-    selector_topic: "/control_selector"
-
-    controllers:
-      - lqr
-      - gap_following
-      - pure_pursuit
-      - teleop
+    selector_topic: "/control_gateway/switch_manual_auto"
+    debounce_time: 0.5
 
     manual_button_index: 7
