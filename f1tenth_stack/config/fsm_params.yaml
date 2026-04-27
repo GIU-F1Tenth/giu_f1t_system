@@ -1,8 +1,8 @@
 fsm_node:
   ros__parameters:
     states:
-      - pure_pursuit
-      - gap_following
-    initial_state: pure_pursuit
+      - pure_pursuit_only
+    initial_state: pure_pursuit_only
     objects_topic: object_bboxes
     output_topic: control_selector
+    trailing_topic: trailing
