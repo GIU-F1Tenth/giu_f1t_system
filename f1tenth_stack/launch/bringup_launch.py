@@ -73,6 +73,9 @@ def generate_launch_description():
     detection_config = os.path.join(
         f1tenth_stack_dir, "config", "detection_config.yaml"
     )
+    imu_config = os.path.join(
+        f1tenth_stack_dir, "config", "artemis_config.yaml"
+    )
 
     joy_la = DeclareLaunchArgument(
         "joy_config",
@@ -144,6 +147,11 @@ def generate_launch_description():
         default_value=detection_config,
         description="Descriptions for detection config",
     )
+    imu_la = DeclareLaunchArgument(
+        "imu_config",
+        default_value=imu_config,
+        description="Descriptions for imu config"
+    )
 
     ld = LaunchDescription(
         [
@@ -161,6 +169,7 @@ def generate_launch_description():
             teleop_switcher_la,
             fsm_la,
             detection_la,
+            imu_la
         ]
     )
 
@@ -290,6 +299,12 @@ def generate_launch_description():
         parameters=[detection_config],
         output="screen",
     )
+    imu_node = Node(
+        package='artemis_imu_ros2',
+        executable='artemis_imu_node',
+        name='artemis_imu_node',
+        parameters=[imu_config]
+    )
     
     pure_pursuit_start_handler = RegisterEventHandler(
         event_handler=OnProcessStart(
@@ -333,6 +348,7 @@ def generate_launch_description():
         ),
         condition=IfCondition(LaunchConfiguration("auto_start")),
     )
+    
 
     # finalize
     ld.add_action(joy_teleop_node)
@@ -348,6 +364,7 @@ def generate_launch_description():
     ld.add_action(pure_pursuit_start_handler)
     ld.add_action(gap_following_start_handler)
     ld.add_action(pure_pursuit_node)
+    ld.add_action(imu_node)
 
     ld.add_action(DeclareLaunchArgument("auto_start", default_value="true"))
     ld.add_action(DeclareLaunchArgument("node_name", default_value="urg_node2"))
