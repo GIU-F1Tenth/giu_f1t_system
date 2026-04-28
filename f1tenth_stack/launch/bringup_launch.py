@@ -80,7 +80,7 @@ def generate_launch_description():
         f1tenth_stack_dir, "config", "dynamic_lookahead_pub_config.yaml"
     )
     horizon_mapper_config = os.path.join(f1tenth_stack_dir, "config", "horizon_mapper.yaml")
-
+    dwa_config = os.path.join(f1tenth_stack_dir, "config", "dwa_config.yaml")
 
     joy_la = DeclareLaunchArgument(
         "joy_config",
@@ -167,6 +167,11 @@ def generate_launch_description():
         default_value=horizon_mapper_config,
         description="Horizon mapper config file",
     )
+    dwa_config_la = DeclareLaunchArgument(
+        "dwa_config",
+        default_value=dwa_config,
+        description="DWA config file",
+    )
 
     ld = LaunchDescription(
         [
@@ -187,6 +192,7 @@ def generate_launch_description():
             imu_la,
             dynamic_lookahead_la,
             horizon_mapper_config_la,
+            dwa_config_la
         ]
     )
 
@@ -337,6 +343,14 @@ def generate_launch_description():
         emulate_tty=True,
         condition=IfCondition(LaunchConfiguration("enable_horizon_mapper")),
     )
+    dwa_node = Node(
+        package='overtaking',
+        executable='dwa_exe',
+        name='dwa_ackermann_node',
+        parameters=[dwa_config],
+        output='screen',
+        emulate_tty=True
+    )
     
     pure_pursuit_start_handler = RegisterEventHandler(
         event_handler=OnProcessStart(
@@ -347,6 +361,12 @@ def generate_launch_description():
     gap_following_start_handler = RegisterEventHandler(
         event_handler=OnProcessStart(
             target_action=gap_following_node,
+            on_start=[dwa_node]
+        )
+    )
+    dwa_start_handler = RegisterEventHandler(
+        event_handler=OnProcessStart(
+            target_action=dwa_node,
             on_start=[control_gateway_node],
         )
     )
@@ -395,6 +415,7 @@ def generate_launch_description():
     ld.add_action(detection_node)
     ld.add_action(pure_pursuit_start_handler)
     ld.add_action(gap_following_start_handler)
+    ld.add_action(dwa_start_handler)
     ld.add_action(pure_pursuit_node)
     ld.add_action(imu_node)
     ld.add_action(horizon_mapper_node)
