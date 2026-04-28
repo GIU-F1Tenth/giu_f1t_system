@@ -76,6 +76,11 @@ def generate_launch_description():
     imu_config = os.path.join(
         f1tenth_stack_dir, "config", "artemis_config.yaml"
     )
+    dynamic_lookahead_config = os.path.join(
+        f1tenth_stack_dir, "config", "dynamic_lookahead_pub_config.yaml"
+    )
+    horizon_mapper_config = os.path.join(f1tenth_stack_dir, "config", "horizon_mapper.yaml")
+
 
     joy_la = DeclareLaunchArgument(
         "joy_config",
@@ -152,6 +157,16 @@ def generate_launch_description():
         default_value=imu_config,
         description="Descriptions for imu config"
     )
+    dynamic_lookahead_la = DeclareLaunchArgument(
+        "dynamic_lookahead_config",
+        default_value=dynamic_lookahead_config,
+        description="Descriptions for dynamic lookahead config",
+    )
+    horizon_mapper_config_la = DeclareLaunchArgument(
+        "horizon_mapper_config",
+        default_value=horizon_mapper_config,
+        description="Horizon mapper config file",
+    )
 
     ld = LaunchDescription(
         [
@@ -169,7 +184,9 @@ def generate_launch_description():
             teleop_switcher_la,
             fsm_la,
             detection_la,
-            imu_la
+            imu_la,
+            dynamic_lookahead_la,
+            horizon_mapper_config_la,
         ]
     )
 
@@ -305,6 +322,21 @@ def generate_launch_description():
         name='artemis_imu_node',
         parameters=[imu_config]
     )
+    dynamic_lookahead_path_pub = Node(
+        package='trajectory_planning',
+        executable='dynamic_lookahead_pub_exe',
+        name='dynamic_lookahead_pub_node',
+        parameters=[dynamic_lookahead_config],
+    )
+    horizon_mapper_node = Node(
+        package="horizon_mapper",
+        executable="horizon_mapper_node",
+        name="horizon_mapper_node",
+        parameters=[horizon_mapper_config],
+        output="screen",
+        emulate_tty=True,
+        condition=IfCondition(LaunchConfiguration("enable_horizon_mapper")),
+    )
     
     pure_pursuit_start_handler = RegisterEventHandler(
         event_handler=OnProcessStart(
@@ -365,10 +397,13 @@ def generate_launch_description():
     ld.add_action(gap_following_start_handler)
     ld.add_action(pure_pursuit_node)
     ld.add_action(imu_node)
+    ld.add_action(horizon_mapper_node)
+    ld.add_action(dynamic_lookahead_path_pub)
 
     ld.add_action(DeclareLaunchArgument("auto_start", default_value="true"))
     ld.add_action(DeclareLaunchArgument("node_name", default_value="urg_node2"))
     ld.add_action(DeclareLaunchArgument("scan_topic_name", default_value="scan"))
+    ld.add_action(DeclareLaunchArgument("enable_horizon_mapper", default_value="false"))
     ld.add_action(urg_node)
     ld.add_action(urg_node2_node_configure_event_handler)
     ld.add_action(urg_node2_node_activate_event_handler)
