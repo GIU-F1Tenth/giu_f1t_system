@@ -81,7 +81,11 @@ def generate_launch_description():
     )
     horizon_mapper_config = os.path.join(f1tenth_stack_dir, "config", "horizon_mapper.yaml")
     dwa_config = os.path.join(f1tenth_stack_dir, "config", "dwa_config.yaml")
-
+    kayn_config = os.path.join(
+        get_package_share_directory('kayn_controller'),
+        'config', 'kayn_params.yaml'
+    )
+    
     joy_la = DeclareLaunchArgument(
         "joy_config",
         default_value=joy_teleop_config,
@@ -172,6 +176,11 @@ def generate_launch_description():
         default_value=dwa_config,
         description="DWA config file",
     )
+    kayn_config_la = DeclareLaunchArgument(
+        "kayn_config", 
+        default_value=kayn_config,
+        description="Kayn config file",
+    )
 
     ld = LaunchDescription(
         [
@@ -192,7 +201,8 @@ def generate_launch_description():
             imu_la,
             dynamic_lookahead_la,
             horizon_mapper_config_la,
-            dwa_config_la
+            dwa_config_la,
+            kayn_config_la
         ]
     )
 
@@ -351,6 +361,14 @@ def generate_launch_description():
         output='screen',
         emulate_tty=True
     )
+    kayn_node = Node(
+        package='kayn_controller',
+        executable='kayn_node',
+        name='kayn_controller_node',
+        parameters=[kayn_config],
+        output='screen',
+        emulate_tty=True,
+    )
     
     pure_pursuit_start_handler = RegisterEventHandler(
         event_handler=OnProcessStart(
@@ -403,6 +421,11 @@ def generate_launch_description():
     
 
     # finalize
+    ld.add_action(DeclareLaunchArgument("auto_start", default_value="true"))
+    ld.add_action(DeclareLaunchArgument("node_name", default_value="urg_node2"))
+    ld.add_action(DeclareLaunchArgument("scan_topic_name", default_value="scan"))
+    ld.add_action(DeclareLaunchArgument("enable_horizon_mapper", default_value="false"))
+    
     ld.add_action(joy_teleop_node)
     ld.add_action(ackermann_to_vesc_node)
     ld.add_action(vesc_to_odom_node)
@@ -417,14 +440,11 @@ def generate_launch_description():
     ld.add_action(gap_following_start_handler)
     ld.add_action(dwa_start_handler)
     ld.add_action(pure_pursuit_node)
-    ld.add_action(imu_node)
+    # ld.add_action(imu_node)
     ld.add_action(horizon_mapper_node)
     ld.add_action(dynamic_lookahead_path_pub)
+    ld.add_action(kayn_node)
 
-    ld.add_action(DeclareLaunchArgument("auto_start", default_value="true"))
-    ld.add_action(DeclareLaunchArgument("node_name", default_value="urg_node2"))
-    ld.add_action(DeclareLaunchArgument("scan_topic_name", default_value="scan"))
-    ld.add_action(DeclareLaunchArgument("enable_horizon_mapper", default_value="false"))
     ld.add_action(urg_node)
     ld.add_action(urg_node2_node_configure_event_handler)
     ld.add_action(urg_node2_node_activate_event_handler)
