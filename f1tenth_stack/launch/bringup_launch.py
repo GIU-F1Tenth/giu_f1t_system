@@ -82,8 +82,7 @@ def generate_launch_description():
     horizon_mapper_config = os.path.join(f1tenth_stack_dir, "config", "horizon_mapper.yaml")
     dwa_config = os.path.join(f1tenth_stack_dir, "config", "dwa_config.yaml")
     kayn_config = os.path.join(
-        get_package_share_directory('kayn_controller'),
-        'config', 'kayn_params.yaml'
+        f1tenth_stack_dir, 'config', 'kayn_params.yaml'
     )
     
     joy_la = DeclareLaunchArgument(
