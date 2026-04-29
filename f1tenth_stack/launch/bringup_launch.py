@@ -84,6 +84,7 @@ def generate_launch_description():
     kayn_config = os.path.join(
         f1tenth_stack_dir, 'config', 'kayn_params.yaml'
     )
+    ekf_config = os.path.join(f1tenth_stack_dir, "config", 'ekf.yaml')
     
     joy_la = DeclareLaunchArgument(
         "joy_config",
@@ -180,6 +181,16 @@ def generate_launch_description():
         default_value=kayn_config,
         description="Kayn config file",
     )
+    ekf_config_la = DeclareLaunchArgument(
+        "ekf_config",
+        default_value=ekf_config,
+        description="EKF config file"
+    )
+    use_sim_time_la = DeclareLaunchArgument(
+        "use_sim_time",
+        default_value="False",
+        description="Flag to enable use_sim_time"
+    )
 
     ld = LaunchDescription(
         [
@@ -201,7 +212,9 @@ def generate_launch_description():
             dynamic_lookahead_la,
             horizon_mapper_config_la,
             dwa_config_la,
-            kayn_config_la
+            kayn_config_la,
+            ekf_config_la,
+            use_sim_time_la
         ]
     )
 
@@ -280,6 +293,13 @@ def generate_launch_description():
         output="screen",
         parameters=[LaunchConfiguration("amcl_config")],
         namespace="",
+    )
+    robot_localization_node = Node(
+        package='robot_localization',
+        executable='ekf_node',
+        name='ekf_filter_node',
+        output='screen',
+        parameters=[ekf_config, {'use_sim_time': LaunchConfiguration('use_sim_time')}]
     )
     gap_following_node = Node(
         package="gap_follower",
@@ -439,16 +459,17 @@ def generate_launch_description():
     ld.add_action(gap_following_start_handler)
     ld.add_action(dwa_start_handler)
     ld.add_action(pure_pursuit_node)
-    # ld.add_action(imu_node)
-    ld.add_action(horizon_mapper_node)
+    ld.add_action(imu_node)
+    # ld.add_action(horizon_mapper_node)
     ld.add_action(dynamic_lookahead_path_pub)
-    ld.add_action(kayn_node)
+    # ld.add_action(kayn_node)
 
     ld.add_action(urg_node)
     ld.add_action(urg_node2_node_configure_event_handler)
     ld.add_action(urg_node2_node_activate_event_handler)
     ld.add_action(map_server_node)
     ld.add_action(amcl_node)
+    ld.add_action(robot_localization_node)
     ld.add_action(lifecycle_manager_node)
 
     return ld
