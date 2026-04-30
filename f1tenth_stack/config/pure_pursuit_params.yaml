@@ -1,7 +1,7 @@
 pure_pursuit_node:
   ros__parameters:
     # Lookahead Distance Parameters
-    max_lookahead_distance: 1.7 # Maximum lookahead distance in meters
+    max_lookahead_distance: 1.5 # Maximum lookahead distance in meters
     min_lookahead_distance: 0.66 # Minimum lookahead distance in meters
 
     # Velocity Control Parameters
@@ -11,7 +11,7 @@ pure_pursuit_node:
     skidding_velocity_thresh: 0.3 # Velocity threshold to prevent skidding
 
     # Control Parameters
-    kp: 0.45 # Proportional gain for steering control
+    kp: 0.5 # Proportional gain for steering control
     kd: 1.2 # Derivative gain for steering control
     k_sigmoid: 8.0 # Sigmoid steepness for velocity control
 
