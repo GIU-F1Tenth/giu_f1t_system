@@ -13,13 +13,13 @@ amcl:
     do_beamskip: false
     global_frame_id: "map"
     lambda_short: 0.1
-    laser_likelihood_max_dist: 2.0
+    laser_likelihood_max_dist: 2.2
     laser_max_range: 10.0
     laser_min_range: -1.0
     laser_model_type: "likelihood_field"
-    max_beams: 100
+    max_beams: 150
     max_particles: 1050
-    min_particles: 400
+    min_particles: 600
     odom_frame_id: "odom"
     set_initial_pose: True
     pf_err: 0.05

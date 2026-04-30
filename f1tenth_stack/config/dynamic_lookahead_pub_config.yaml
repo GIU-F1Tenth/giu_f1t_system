@@ -1,20 +1,20 @@
 dynamic_lookahead_pub_node:
   ros__parameters:
     # Lookahead distance adapts based on velocity
-    lookahead_distance_min: 1.7      # [m] minimum lookahead distance
-    lookahead_distance_max: 2.5      # [m] maximum lookahead distance
+    lookahead_distance_min: 1.0      # [m] minimum lookahead distance
+    lookahead_distance_max: 1.7      # [m] maximum lookahead distance
     velocity_scale: 0.6              # scaling factor (lookahead = v * scale)
 
     # Topics
     lookahead_marker_topic: "/lookahead_goal"
-    odom_topic: "ego_racecar/odom"
+    odom_topic: "odom"
     # Path CSV
-    csv_path_topic: "/csv_path"
+    csv_path_topic: "/pp_path"
     reverse: False 
 
     # Frames
     target_frame: "map"
-    source_frame: "ego_racecar/base_link"
+    source_frame: "base_link"
 
     # Timer update frequency
     timer_frequency: 30.0  # Hz

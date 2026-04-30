@@ -17,9 +17,9 @@ object_detection:
     boundary_check_radius: 2                    # Grid-cell neighborhood checked around each point for boundary contact; increasing it filters more nearby-wall points, decreasing it is less strict.
     
     min_bbox_width: 0.15                        # Minimum fitted box width in meters; increasing it rejects thin detections, decreasing it accepts narrower objects and more noise.
-    max_bbox_width: 1.5                         # Maximum fitted box width in meters; increasing it accepts wider detections, decreasing it rejects large merged clusters sooner.
+    max_bbox_width: 0.5                         # Maximum fitted box width in meters; increasing it accepts wider detections, decreasing it rejects large merged clusters sooner.
     min_bbox_height: 0.15                       # Minimum fitted box height in meters; increasing it rejects short/small detections, decreasing it accepts smaller objects and more clutter.
-    max_bbox_height: 1.5                        # Maximum fitted box height in meters; increasing it accepts taller detections, decreasing it rejects oversized clusters sooner.
+    max_bbox_height: 0.5                        # Maximum fitted box height in meters; increasing it accepts taller detections, decreasing it rejects oversized clusters sooner.
     
     track_width: 1.5                            # Assumed track width for Frenet filtering; increasing it allows detections farther from centerline, decreasing it removes more side detections.
     left_boundary_inflation: 0.3                # Safety margin subtracted from the left track edge; increasing it rejects more detections near the left boundary, decreasing it allows more.
