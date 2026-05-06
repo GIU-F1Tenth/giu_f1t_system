@@ -310,7 +310,7 @@ def generate_launch_description():
     trailing_controller_node = Node(
         package="trailing_controller",
         executable="trailing_controller_node",
-        name="trailing_controller_node",
+        name="trailing_controller",
         parameters=[trailing_controller_config],
     )
     lifecycle_manager_node = Node(
@@ -451,7 +451,7 @@ def generate_launch_description():
     ld.add_action(vesc_driver_node)
     ld.add_action(ackermann_mux_node)
     ld.add_action(static_tf_node)
-    # ld.add_action(trailing_controller_node)
+    ld.add_action(trailing_controller_node)
     ld.add_action(teleop_switcher_node)
     ld.add_action(fsm_node)
     ld.add_action(detection_node)
@@ -459,7 +459,7 @@ def generate_launch_description():
     ld.add_action(gap_following_start_handler)
     ld.add_action(dwa_start_handler)
     ld.add_action(pure_pursuit_node)
-    ld.add_action(imu_node)
+    # ld.add_action(imu_node)
     # ld.add_action(horizon_mapper_node)
     ld.add_action(dynamic_lookahead_path_pub)
     # ld.add_action(kayn_node)
