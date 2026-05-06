@@ -3,9 +3,9 @@ trailing_controller:
     kp: 0.5
     kd: 0.2
     target_gap: 1.0
-    control_rate: 50.0
+    control_rate: 40.0
     path_topic: "/pp_path"
-    object_velocity_topic: "/object_velocities"
+    object_velocity_topic: "/detected_objects"
     speed_cap_topic: "/speed_cap"
-    max_speed: 8.0
+    max_speed: 5.0
     min_speed: 0.0
