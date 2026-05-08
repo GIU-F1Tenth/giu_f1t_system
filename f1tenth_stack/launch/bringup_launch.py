@@ -85,6 +85,7 @@ def generate_launch_description():
         f1tenth_stack_dir, 'config', 'kayn_params.yaml'
     )
     ekf_config = os.path.join(f1tenth_stack_dir, "config", 'ekf.yaml')
+    state_publisher_config = os.path.join(f1tenth_stack_dir, "config", 'state_publisher.yaml')
     
     joy_la = DeclareLaunchArgument(
         "joy_config",
@@ -190,7 +191,12 @@ def generate_launch_description():
         "use_sim_time",
         default_value="False",
         description="Flag to enable use_sim_time"
-    )
+    ) 
+    state_publisher_la = DeclareLaunchArgument(
+        "state_publisher_config",
+        default_value=state_publisher_config,
+        description="State publisher config file"
+    ) 
 
     ld = LaunchDescription(
         [
@@ -214,7 +220,8 @@ def generate_launch_description():
             dwa_config_la,
             kayn_config_la,
             ekf_config_la,
-            use_sim_time_la
+            use_sim_time_la,
+            state_publisher_la
         ]
     )
 
@@ -388,6 +395,12 @@ def generate_launch_description():
         output='screen',
         emulate_tty=True,
     )
+    state_publisher_node = Node(
+        package="state_publisher",
+        executable="state_publisher",
+        name="state_publisher",
+        parameters=[state_publisher_config],
+    )
     
     pure_pursuit_start_handler = RegisterEventHandler(
         event_handler=OnProcessStart(
@@ -460,9 +473,10 @@ def generate_launch_description():
     ld.add_action(dwa_start_handler)
     ld.add_action(pure_pursuit_node)
     # ld.add_action(imu_node)
-    # ld.add_action(horizon_mapper_node)
+    ld.add_action(horizon_mapper_node)
     ld.add_action(dynamic_lookahead_path_pub)
-    # ld.add_action(kayn_node)
+    ld.add_action(kayn_node)
+    ld.add_action(state_publisher_node)
 
     ld.add_action(urg_node)
     ld.add_action(urg_node2_node_configure_event_handler)
