@@ -1,0 +1,35 @@
+MPC_karim:
+  ros__parameters:
+    # Topics
+    odom_topic: "/car_state/odom"
+    drive_topic: "/MPC_karim/drive"
+    selector_topic: "/control_selector"
+
+    # Path source: csv_path_pub.yaml is parsed at startup; csv_path & inverse
+    # are read from it so MPC_karim and csv_path_pub stay in sync.
+    csv_path_pub_yaml: "/home/jetson/Desktop/mechabyte/software/src/giu_f1t_system/f1tenth_stack/config/csv_path_pub.yaml"
+
+    # MPC sizing
+    horizon: 15            # prediction steps
+    dt: 0.1                # seconds per step
+    wheelbase: 0.33        # F1TENTH wheelbase (m)
+    control_frequency: 50.0  # solve rate (Hz)
+
+    # Cost weights — diag(Q) over [x, y, v, theta], diag(R) over [a, delta]
+    q_x: 10.0
+    q_y: 10.0
+    q_v: 1.0
+    q_theta: 2.0
+    r_a: 0.05
+    r_delta: 0.5
+
+    # Hard limits
+    a_min: -3.0
+    a_max:  3.0
+    delta_min: -0.4
+    delta_max:  0.4
+    v_min: 0.0
+    v_max: 5.0
+
+    # Scales the per-waypoint speed read from the CSV
+    speed_factor: 1.0
