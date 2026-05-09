@@ -9,8 +9,8 @@ mcl_particle_filter_node:
     range_method: "cddt"
     rangelib_variant: 3
     fine_timing: false
-    publish_odom: true
-    viz: true
+    publish_odom: false
+    viz: false
     z_short: 0.01
     z_max: 0.07
     z_rand: 0.12
