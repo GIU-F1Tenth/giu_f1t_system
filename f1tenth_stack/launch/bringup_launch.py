@@ -73,9 +73,6 @@ def generate_launch_description():
     detection_config = os.path.join(
         f1tenth_stack_dir, "config", "detection_config.yaml"
     )
-    imu_config = os.path.join(
-        f1tenth_stack_dir, "config", "artemis_config.yaml"
-    )
     dynamic_lookahead_config = os.path.join(
         f1tenth_stack_dir, "config", "dynamic_lookahead_pub_config.yaml"
     )
@@ -157,11 +154,6 @@ def generate_launch_description():
         default_value=detection_config,
         description="Descriptions for detection config",
     )
-    imu_la = DeclareLaunchArgument(
-        "imu_config",
-        default_value=imu_config,
-        description="Descriptions for imu config"
-    )
     dynamic_lookahead_la = DeclareLaunchArgument(
         "dynamic_lookahead_config",
         default_value=dynamic_lookahead_config,
@@ -214,7 +206,6 @@ def generate_launch_description():
             teleop_switcher_la,
             fsm_la,
             detection_la,
-            imu_la,
             dynamic_lookahead_la,
             horizon_mapper_config_la,
             dwa_config_la,
@@ -358,12 +349,6 @@ def generate_launch_description():
         parameters=[detection_config],
         output="screen",
     )
-    imu_node = Node(
-        package='artemis_imu_ros2',
-        executable='artemis_imu_node',
-        name='artemis_imu_node',
-        parameters=[imu_config]
-    )
     dynamic_lookahead_path_pub = Node(
         package='trajectory_planning',
         executable='dynamic_lookahead_pub_exe',
@@ -472,7 +457,6 @@ def generate_launch_description():
     ld.add_action(gap_following_start_handler)
     ld.add_action(dwa_start_handler)
     ld.add_action(pure_pursuit_node)
-    # ld.add_action(imu_node)
     ld.add_action(horizon_mapper_node)
     ld.add_action(dynamic_lookahead_path_pub)
     ld.add_action(kayn_node)
