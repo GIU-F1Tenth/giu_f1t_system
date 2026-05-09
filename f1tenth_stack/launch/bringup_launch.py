@@ -28,7 +28,7 @@ from launch.actions import IncludeLaunchDescription
 from launch_xml.launch_description_sources import XMLLaunchDescriptionSource
 from ament_index_python.packages import get_package_share_directory
 import os
-from launch.conditions import IfCondition
+from launch.conditions import IfCondition, UnlessCondition
 from launch_ros.actions import LifecycleNode
 from launch.actions import DeclareLaunchArgument, EmitEvent, RegisterEventHandler
 from launch.event_handlers import OnProcessStart
@@ -83,6 +83,7 @@ def generate_launch_description():
     )
     ekf_config = os.path.join(f1tenth_stack_dir, "config", 'ekf.yaml')
     state_publisher_config = os.path.join(f1tenth_stack_dir, "config", 'state_publisher.yaml')
+    mpc_karim_config = os.path.join(f1tenth_stack_dir, "config", "MPC_karim_params.yaml")
 
     joy_la = DeclareLaunchArgument(
         "joy_config",
@@ -179,15 +180,25 @@ def generate_launch_description():
         default_value=ekf_config,
         description="EKF config file"
     )
+    state_publisher_la = DeclareLaunchArgument(
+        "state_publisher_config",
+        default_value=state_publisher_config,
+        description="State publisher config file"
+    ) 
+    mpc_karim_la = DeclareLaunchArgument(
+        "mpc_karim_config",
+        default_value=mpc_karim_config,
+        description="MPC Karim config file",
+    )
     use_sim_time_la = DeclareLaunchArgument(
         "use_sim_time",
         default_value="False",
         description="Flag to enable use_sim_time"
     ) 
-    state_publisher_la = DeclareLaunchArgument(
-        "state_publisher_config",
-        default_value=state_publisher_config,
-        description="State publisher config file"
+    mapping_mode_la = DeclareLaunchArgument(
+        "mapping_mode",
+        default_value="False",
+        description="Flag to enable mapping_mode"
     ) 
 
     ld = LaunchDescription(
@@ -212,7 +223,9 @@ def generate_launch_description():
             kayn_config_la,
             ekf_config_la,
             use_sim_time_la,
-            state_publisher_la
+            state_publisher_la,
+            mpc_karim_la,
+            mapping_mode_la
         ]
     )
 
@@ -283,6 +296,7 @@ def generate_launch_description():
         output="screen",
         parameters=[{"yaml_filename": map_server_config}],
         namespace="",
+        condition=UnlessCondition(LaunchConfiguration("mapping_mode")),
     )
     amcl_node = LifecycleNode(
         package="nav2_amcl",
@@ -291,6 +305,7 @@ def generate_launch_description():
         output="screen",
         parameters=[LaunchConfiguration("amcl_config")],
         namespace="",
+        condition=UnlessCondition(LaunchConfiguration("mapping_mode")),
     )
     robot_localization_node = Node(
         package='robot_localization',
@@ -323,6 +338,7 @@ def generate_launch_description():
                 "node_names": ["map_server", "amcl"],
             }
         ],
+        condition=UnlessCondition(LaunchConfiguration("mapping_mode")),
     )
     control_gateway_node = Node(
         package="control_gateway",
@@ -385,6 +401,14 @@ def generate_launch_description():
         executable="state_publisher",
         name="state_publisher",
         parameters=[state_publisher_config],
+    )
+    mpc_karim_node = Node(
+        package="MPC_karim",
+        executable="mpc_karim_node",
+        name="MPC_karim",
+        parameters=[mpc_karim_config],
+        output='screen',
+        emulate_tty=True,
     )
     
     pure_pursuit_start_handler = RegisterEventHandler(
@@ -460,14 +484,16 @@ def generate_launch_description():
     ld.add_action(horizon_mapper_node)
     ld.add_action(dynamic_lookahead_path_pub)
     ld.add_action(kayn_node)
+    ld.add_action(mpc_karim_node)
     ld.add_action(state_publisher_node)
+    # ld.add_action(robot_localization_node)
 
     ld.add_action(urg_node)
     ld.add_action(urg_node2_node_configure_event_handler)
     ld.add_action(urg_node2_node_activate_event_handler)
+    
     ld.add_action(map_server_node)
     ld.add_action(amcl_node)
-    # ld.add_action(robot_localization_node)
     ld.add_action(lifecycle_manager_node)
 
     return ld
