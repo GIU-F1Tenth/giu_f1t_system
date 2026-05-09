@@ -86,7 +86,6 @@ def generate_launch_description():
     )
     ekf_config = os.path.join(f1tenth_stack_dir, "config", 'ekf.yaml')
     state_publisher_config = os.path.join(f1tenth_stack_dir, "config", 'state_publisher.yaml')
-    particle_filter_config = os.path.join(f1tenth_stack_dir, "config", "particle_filter_params.yaml")
 
     joy_la = DeclareLaunchArgument(
         "joy_config",
@@ -198,11 +197,6 @@ def generate_launch_description():
         default_value=state_publisher_config,
         description="State publisher config file"
     ) 
-    particle_filter_la = DeclareLaunchArgument(
-        "particle_filter_config",
-        default_value=particle_filter_config,
-        description="Particle Filter config file"
-    ) 
 
     ld = LaunchDescription(
         [
@@ -227,8 +221,7 @@ def generate_launch_description():
             kayn_config_la,
             ekf_config_la,
             use_sim_time_la,
-            state_publisher_la,
-            particle_filter_la
+            state_publisher_la
         ]
     )
 
@@ -408,12 +401,6 @@ def generate_launch_description():
         name="state_publisher",
         parameters=[state_publisher_config],
     )
-    particle_filter_node = Node(
-        package="mcl_particle_filter",
-        executable="mcl_particle_filter_node",
-        name="mcl_particle_filter_node",
-        parameters=[particle_filter_config]
-    )
     
     pure_pursuit_start_handler = RegisterEventHandler(
         event_handler=OnProcessStart(
@@ -490,7 +477,6 @@ def generate_launch_description():
     ld.add_action(dynamic_lookahead_path_pub)
     ld.add_action(kayn_node)
     ld.add_action(state_publisher_node)
-    # ld.add_action(particle_filter_node)
 
     ld.add_action(urg_node)
     ld.add_action(urg_node2_node_configure_event_handler)
