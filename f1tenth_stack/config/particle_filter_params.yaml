@@ -1,22 +1,22 @@
 mcl_particle_filter_node:
   ros__parameters:
-    angle_step: 51
-    min_particles: 500
+    angle_step: 9
+    min_particles: 1000
     max_particles: 3000
     max_viz_particles: 50
     squash_factor: 2.2
-    max_range: 20.0
-    theta_discretization: 150
-    range_method: "glt"
-    rangelib_variant: 3
+    max_range: 10.0
+    theta_discretization: 190
+    range_method: "cddt"
+    rangelib_variant: 2
     fine_timing: false
     publish_odom: false
     viz: false
 
-    z_hit: 0.85
-    z_short: 0.10
-    z_max: 0.025
-    z_rand: 0.025
+    z_hit: 0.5
+    z_short: 0.05
+    z_max: 0.05
+    z_rand: 0.4
     sigma_hit: 0.1
 
     alpha_1: 0.5
