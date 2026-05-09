@@ -12,7 +12,7 @@ horizon_mapper_node:
 
     # Vehicle parameters
     wheelbase: 0.33 # Vehicle wheelbase (meters)
-    max_steering_angle: 0.9 # Maximum steering angle (radians)
+    max_steering_angle: 1.0 # Maximum steering angle (radians)
     min_speed: 0.1 # Minimum velocity (m/s)
 
     # Path Source: set use_csv_path to true to load from CSV file instead of subscribing to a topic
@@ -22,7 +22,7 @@ horizon_mapper_node:
     csv_output_path: "ref_trajectory.csv"
 
     # Input Topics
-    odom_topic: "/odom"
+    odom_topic: "/car_state/odom"
     scan_topic: "/scan"
     initialpose_topic: "/initialpose"
     path_topic: "/path"
@@ -42,7 +42,7 @@ horizon_mapper_node:
     qos_depth: 10
 
     # Traversal direction — set to true to run the trajectory in reverse
-    reverse_direction: true
+    reverse_direction: false
 
     # Advanced Mode Settings
     default_left_bound: 1.0 

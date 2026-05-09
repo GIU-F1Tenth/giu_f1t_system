@@ -8,7 +8,7 @@ pure_pursuit_node:
     max_velocity: 4.7 # Maximum allowed velocity in m/s
     min_velocity: 2.2 # Minimum allowed velocity in m/s
     vel_division_factor: 3.0 # Factor to reduce velocity commands
-    skidding_velocity_thresh: 0.3 # Velocity threshold to prevent skidding
+    skidding_velocity_thresh: 2.0 # Velocity threshold to prevent skidding
 
     # Control Parameters
     kp: 0.5 # Proportional gain for steering control

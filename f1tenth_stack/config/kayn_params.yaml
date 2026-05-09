@@ -24,15 +24,15 @@ kayn_controller_node:
     mpc.timeout_ms: 5.0    # solver budget [ms]
 
     # --- Stanley ---
-    stanley.k: 1.5          # cross-track gain
+    stanley.k: 0.8          # cross-track gain
 
     # --- FSM controller slots ---
     # Each FSM state runs an independently chosen controller.
     # Valid values: "stanley" | "lqr" | "mpc"
-    fsm.warmup_controller:   "stanley"
-    fsm.straight_controller: "lqr"
+    fsm.warmup_controller:   "mpc"
+    fsm.straight_controller: "mpc"
     fsm.curve_controller:    "mpc"
-    fsm.fallback_controller: "stanley"
+    fsm.fallback_controller: "mpc"
 
     # --- FSM / curvature ---
     fsm.enter_threshold: 0.10   # kappa to enter CURVE [rad/m]
@@ -43,15 +43,15 @@ kayn_controller_node:
     fsm.lookahead:       10     # curvature estimator lookahead points
 
     # --- Speed / limits ---
-    max_speed:    8.0     # [m/s]
-    max_steering: 0.4189  # [rad]
+    max_speed:    3.5     # [m/s]
+    max_steering: 1.0  # [rad]
     max_accel:    5.0     # [m/s²]
 
     # --- Control loop ---
-    control_hz: 50.0
+    control_hz: 150.0
 
     # --- Topics ---
-    odom_topic:       "/odom"
+    odom_topic:       "/car_state/odom"
     trajectory_topic: "/horizon_mapper/reference_trajectory"
     path_ready_topic: "/horizon_mapper/path_ready"
     drive_topic:      "/kayn/drive"
