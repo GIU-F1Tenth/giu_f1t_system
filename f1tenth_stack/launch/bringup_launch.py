@@ -484,9 +484,9 @@ def generate_launch_description():
     ld.add_action(horizon_mapper_node)
     ld.add_action(dynamic_lookahead_path_pub)
     ld.add_action(kayn_node)
-    ld.add_action(mpc_karim_node)
+    # ld.add_action(mpc_karim_node)
     ld.add_action(state_publisher_node)
-    # ld.add_action(robot_localization_node)
+    ld.add_action(robot_localization_node)
 
     ld.add_action(urg_node)
     ld.add_action(urg_node2_node_configure_event_handler)
