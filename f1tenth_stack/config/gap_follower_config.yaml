@@ -14,5 +14,5 @@ gap_steering_node:
     obstacle_distance_thresh: 0.2
     min_distance: 0.4
     max_distance: 10.0
-    min_vel: 1.6
-    max_vel: 5.0
+    min_vel: 0.8
+    max_vel: 0.8
