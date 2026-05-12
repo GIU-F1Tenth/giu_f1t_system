@@ -199,7 +199,32 @@ def generate_launch_description():
         "mapping_mode",
         default_value="False",
         description="Flag to enable mapping_mode"
-    ) 
+    )
+    use_gap_following_la = DeclareLaunchArgument(
+        "use_gap_following",
+        default_value="false",
+        description="Start the gap_following controller node when true",
+    )
+    use_pure_pursuit_la = DeclareLaunchArgument(
+        "use_pure_pursuit",
+        default_value="false",
+        description="Start the pure_pursuit controller node when true",
+    )
+    use_dwa_la = DeclareLaunchArgument(
+        "use_dwa",
+        default_value="false",
+        description="Start the dwa controller node when true",
+    )
+    use_kayn_la = DeclareLaunchArgument(
+        "use_kayn",
+        default_value="false",
+        description="Start the kayn controller node when true",
+    )
+    use_mpc_karim_la = DeclareLaunchArgument(
+        "use_mpc_karim",
+        default_value="false",
+        description="Start the mpc_karim controller node when true",
+    )
 
     ld = LaunchDescription(
         [
@@ -225,7 +250,12 @@ def generate_launch_description():
             use_sim_time_la,
             state_publisher_la,
             mpc_karim_la,
-            mapping_mode_la
+            mapping_mode_la,
+            use_gap_following_la,
+            use_pure_pursuit_la,
+            use_dwa_la,
+            use_kayn_la,
+            use_mpc_karim_la,
         ]
     )
 
@@ -241,6 +271,7 @@ def generate_launch_description():
         name="pure_pursuit_node",
         parameters=[pure_pursuit_config],
         output="screen",
+        condition=IfCondition(LaunchConfiguration("use_pure_pursuit")),
     )
     csv_pp_node = Node(
         package="trajectory_planning",
@@ -319,6 +350,7 @@ def generate_launch_description():
         executable="steering_speed_exe",
         name="gap_steering_node",
         parameters=[gap_follower_config],
+        condition=IfCondition(LaunchConfiguration("use_gap_following")),
     )
     trailing_controller_node = Node(
         package="trailing_controller",
@@ -386,7 +418,8 @@ def generate_launch_description():
         name='dwa_ackermann_node',
         parameters=[dwa_config],
         output='screen',
-        emulate_tty=True
+        emulate_tty=True,
+        condition=IfCondition(LaunchConfiguration("use_dwa")),
     )
     kayn_node = Node(
         package='kayn_controller',
@@ -395,6 +428,7 @@ def generate_launch_description():
         parameters=[kayn_config],
         output='screen',
         emulate_tty=True,
+        condition=IfCondition(LaunchConfiguration("use_kayn")),
     )
     state_publisher_node = Node(
         package="state_publisher",
@@ -409,26 +443,9 @@ def generate_launch_description():
         parameters=[mpc_karim_config],
         output='screen',
         emulate_tty=True,
+        condition=IfCondition(LaunchConfiguration("use_mpc_karim")),
     )
     
-    pure_pursuit_start_handler = RegisterEventHandler(
-        event_handler=OnProcessStart(
-            target_action=pure_pursuit_node,
-            on_start=[gap_following_node, csv_pp_node],
-        )
-    )
-    gap_following_start_handler = RegisterEventHandler(
-        event_handler=OnProcessStart(
-            target_action=gap_following_node,
-            on_start=[dwa_node]
-        )
-    )
-    dwa_start_handler = RegisterEventHandler(
-        event_handler=OnProcessStart(
-            target_action=dwa_node,
-            on_start=[control_gateway_node],
-        )
-    )
     urg_node2_node_configure_event_handler = RegisterEventHandler(
         event_handler=OnProcessStart(
             target_action=urg_node,
@@ -477,14 +494,15 @@ def generate_launch_description():
     ld.add_action(teleop_switcher_node)
     ld.add_action(fsm_node)
     ld.add_action(detection_node)
-    ld.add_action(pure_pursuit_start_handler)
-    ld.add_action(gap_following_start_handler)
-    ld.add_action(dwa_start_handler)
     ld.add_action(pure_pursuit_node)
+    ld.add_action(gap_following_node)
+    ld.add_action(csv_pp_node)
+    ld.add_action(dwa_node)
+    ld.add_action(control_gateway_node)
+    ld.add_action(mpc_karim_node)
     ld.add_action(horizon_mapper_node)
     ld.add_action(dynamic_lookahead_path_pub)
     ld.add_action(kayn_node)
-    # ld.add_action(mpc_karim_node)
     ld.add_action(state_publisher_node)
     ld.add_action(robot_localization_node)
 
