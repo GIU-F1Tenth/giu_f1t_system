@@ -1,12 +1,12 @@
 pure_pursuit_node:
   ros__parameters:
     # Lookahead Distance Parameters
-    max_lookahead_distance: 2.5      # Maximum lookahead distance in meters
+    max_lookahead_distance: 2.9      # Maximum lookahead distance in meters
     min_lookahead_distance: 1.5      # Minimum lookahead distance in meters
     
     # Velocity Control Parameters
     max_velocity: 8.0                 # Maximum allowed velocity in m/s
-    min_velocity: 2.2                 # Minimum allowed velocity in m/s
+    min_velocity: 3.0                 # Minimum allowed velocity in m/s
     vel_division_factor: 1.0          # Factor to reduce velocity commands
     skidding_velocity_thresh: 1.0     # Velocity threshold to prevent skidding
     
@@ -15,9 +15,9 @@ pure_pursuit_node:
     kd: 1.2                           # Derivative gain for steering control
     k_sigmoid: 8.0                    # Sigmoid steepness for velocity control
     use_lateral_error_gamma_compensation: true  # Enable compensation of steering angle based on lateral error
-    lateral_error_compensation_gain: 0.17  # Gain for lateral error compensation
+    lateral_error_compensation_gain: 0.31  # Gain for lateral error compensation
     use_lateral_error_speed_reducer: true  # Enable speed reduction based on lateral error
-    lateral_error_speed_reducer_gain: 2.1  # Gain for speed reduction based on lateral error
+    lateral_error_speed_reducer_gain: 2.0  # Gain for speed reduction based on lateral error
 
     # Topic Names
     cmd_vel_topic: "/pure_pursuit/drive"   # Ackermann drive command topic

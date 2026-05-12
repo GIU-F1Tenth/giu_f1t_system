@@ -1,61 +1,80 @@
 kayn_controller_node:
   ros__parameters:
 
-    # --- Vehicle ---
-    wheelbase: 0.33        # [m]
-    dt: 0.02               # [s] must match control_hz
+    # ── Vehicle ──────────────────────────────────────────────────────────────
+    wheelbase: 0.33        # [m]  kinematic model parameter
+    dt: 0.005              # [s]  integration timestep; must equal 1 / control_hz
+    control_hz: 80.0      # [Hz] control loop rate
 
-    # --- LQR weights: Q=diag([px,py,theta,v]), R=diag([delta,a]) ---
-    lqr.q_px:    5.0
-    lqr.q_py:    5.0
-    lqr.q_theta: 6.0
-    lqr.q_v:     1.0
+    # ── LQR ──────────────────────────────────────────────────────────────────
+    # Q = diag([q_px, q_py, q_theta, q_v])  state error penalty
+    # R = diag([r_delta, r_a])               control effort penalty
+    lqr.q_px:    6.0
+    lqr.q_py:    6.0
+    lqr.q_theta: 8.0
+    lqr.q_v:     2.0
     lqr.r_delta: 4.0
     lqr.r_a:     0.3
 
-    # --- MPC ---
-    mpc.horizon_n: 20
-    mpc.q_px:    5.0
-    mpc.q_py:    5.0
-    mpc.q_theta: 6.0
-    mpc.q_v:     1.0
-    mpc.r_delta: 4.0
+    # ── MPC ───────────────────────────────────────────────────────────────────
+    # Same Q/R semantics as LQR.
+    mpc.horizon_n:  20     # prediction steps; longer = better lookahead, slower solve
+    mpc.dt:        0.04   # [s] prediction timestep — independent of control dt.
+                          #     horizon = N × mpc.dt = 20 × 0.04 = 0.8 s lookahead.
+                          #     raise mpc.dt (not N) for longer lookahead without extra solve cost.
+    mpc.q_px:    7.0
+    mpc.q_py:    7.0
+    mpc.q_theta: 5.0
+    mpc.q_v:     9.0   
+    mpc.r_delta: 8.0   
     mpc.r_a:     0.3
-    mpc.timeout_ms: 5.0    # solver budget [ms]
+    mpc.timeout_ms: 7.0  # solver budget [ms]; exceeded → FSM enters FALLBACK
 
-    # --- Stanley ---
-    stanley.k: 0.8          # cross-track gain
+    # ── Stanley ───────────────────────────────────────────────────────────────
+    stanley.k: 1.8       # cross-track gain; raise for tighter tracking, lower if oscillating
 
-    # --- FSM controller slots ---
+    # ── FSM controller slots ──────────────────────────────────────────────────
     # Each FSM state runs an independently chosen controller.
     # Valid values: "stanley" | "lqr" | "mpc"
-    fsm.warmup_controller:   "mpc"
-    fsm.straight_controller: "mpc"
+    fsm.warmup_controller:   "stanley"
+    fsm.straight_controller: "lqr"
     fsm.curve_controller:    "mpc"
-    fsm.fallback_controller: "mpc"
+    fsm.fallback_controller: "stanley"
 
-    # --- FSM / curvature ---
-    fsm.enter_threshold: 0.10   # kappa to enter CURVE [rad/m]
-    fsm.exit_threshold:  0.06   # kappa to leave CURVE [rad/m]
-    fsm.warmup_steps:    50     # Stanley steps before handing to LQR (1s at 50Hz)
-    fsm.confirm_steps:   3      # consecutive samples before transition
-    fsm.blend_window:    5      # waypoints for blend interpolation
-    fsm.lookahead:       10     # curvature estimator lookahead points
+    # ── FSM timing ────────────────────────────────────────────────────────────
+    fsm.warmup_steps:  150  # consecutive motion steps (v ≥ v_warmup_min) required to exit WARMUP
+    fsm.confirm_steps:  3   # consecutive samples required before any state transition
+    fsm.blend_window:   5   # steps to interpolate between controllers at transitions
+    fsm.v_warmup_min:   0.2   # [m/s] minimum speed to count a warmup step as "moving"
+    fsm.v_stop:         0.05  # [m/s] speed below which car is considered stopped
+    fsm.stop_confirm_steps: 20  # steps below v_stop before re-entering WARMUP
 
-    # --- Speed / limits ---
-    max_speed:    3.5     # [m/s]
-    max_steering: 1.0  # [rad]
-    max_accel:    5.0     # [m/s²]
+    # ── Curvature detection ───────────────────────────────────────────────────
+    # Menger curvature kappa = 1/R [rad/m] estimated over lookahead waypoints.
+    # Hysteresis: exit_threshold must be strictly less than enter_threshold.
+    fsm.enter_threshold: 0.10  # kappa above which CURVE is entered  (R < 10 m)
+    fsm.exit_threshold:  0.06  # kappa below which STRAIGHT re-enters (R > 16.7 m)
+    fsm.lookahead:       10    # waypoints ahead used for curvature estimate
 
-    # --- Control loop ---
-    control_hz: 150.0
+    # ── Speed / limits ────────────────────────────────────────────────────────
+    max_speed:    3.0      # [m/s]
+    max_steering: 0.41888  # [rad]
+    max_accel:    5.0      # [m/s²]
 
-    # --- Topics ---
+    # ── Topics ────────────────────────────────────────────────────────────────
     odom_topic:       "/car_state/odom"
     trajectory_topic: "/horizon_mapper/reference_trajectory"
     path_ready_topic: "/horizon_mapper/path_ready"
     drive_topic:      "/kayn/drive"
 
-    # --- Logging ---
-    debug: false
+    # ── Speed scaling ─────────────────────────────────────────────────────────
+    straight_speed_scale: 1.0   # applied in WARMUP / STRAIGHT / FALLBACK states
+    curve_speed_scale:    1.0   # applied in CURVE / BLEND_OUT / BLEND_IN states
+    # 0.8 = 80 % of trajectory speed.
+
+    # ── Traversal direction ───────────────────────────────────────────────────
+    reverse_direction: false    # Mirror horizon_mapper's reverse_direction flag. 
+
+    # ── Logging ───────────────────────────────────────────────────────────────
+    debug:       false
     log_every_n: 25

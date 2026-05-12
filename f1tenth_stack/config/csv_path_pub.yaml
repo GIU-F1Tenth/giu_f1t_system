@@ -1,6 +1,6 @@
 csv_path_pub:
   ros__parameters:
     path_topic: "/pp_path" # "csv_pp_path"
-    csv_path: "/home/jetson/Desktop/mechabyte/software/src/giu_f1t_system/f1tenth_stack/path/azab3.csv"
-    speed_factor: 0.7
+    csv_path: "/home/jetson/Desktop/mechabyte/software/src/giu_f1t_system/f1tenth_stack/path/mpc.csv"
+    speed_factor: 1.0
     inverse: false
