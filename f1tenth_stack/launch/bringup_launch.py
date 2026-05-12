@@ -84,6 +84,7 @@ def generate_launch_description():
     ekf_config = os.path.join(f1tenth_stack_dir, "config", 'ekf.yaml')
     state_publisher_config = os.path.join(f1tenth_stack_dir, "config", 'state_publisher.yaml')
     mpc_karim_config = os.path.join(f1tenth_stack_dir, "config", "MPC_karim_params.yaml")
+    lidar_filter_config = os.path.join(f1tenth_stack_dir, "config", "lidar_filter.yaml")
 
     joy_la = DeclareLaunchArgument(
         "joy_config",
@@ -200,6 +201,11 @@ def generate_launch_description():
         default_value="False",
         description="Flag to enable mapping_mode"
     )
+    lidar_filter_la = DeclareLaunchArgument(
+        "lidar_filter",
+        default_value=lidar_filter_config,
+        description="Lidar filter config file"
+    )
     use_gap_following_la = DeclareLaunchArgument(
         "use_gap_following",
         default_value="false",
@@ -251,6 +257,7 @@ def generate_launch_description():
             state_publisher_la,
             mpc_karim_la,
             mapping_mode_la,
+            lidar_filter_la,
             use_gap_following_la,
             use_pure_pursuit_la,
             use_dwa_la,
@@ -445,6 +452,13 @@ def generate_launch_description():
         emulate_tty=True,
         condition=IfCondition(LaunchConfiguration("use_mpc_karim")),
     )
+    lidar_filter_node = Node(
+        package="lidar_filter",
+        executable="lidar_filter",
+        name="lidar_filter",
+        parameters=[lidar_filter_config],
+        output="screen",
+    )
     
     urg_node2_node_configure_event_handler = RegisterEventHandler(
         event_handler=OnProcessStart(
@@ -507,6 +521,7 @@ def generate_launch_description():
     ld.add_action(robot_localization_node)
 
     ld.add_action(urg_node)
+    ld.add_action(lidar_filter_node)
     ld.add_action(urg_node2_node_configure_event_handler)
     ld.add_action(urg_node2_node_activate_event_handler)
     

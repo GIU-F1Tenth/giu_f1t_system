@@ -1,0 +1,8 @@
+lidar_filter:
+  ros__parameters:
+    scan_input_topic: "/scan"
+    scan_output_topic: "/scan/filtered"
+    odom_topic: "/car_state/odom"
+    mask_path: "/home/jetson/Desktop/mechabyte/software/src/giu_f1t_system/f1tenth_stack/maps/map.mask.json"
+    max_range: 5.5
+    queue_depth: 10
