@@ -85,6 +85,7 @@ def generate_launch_description():
     state_publisher_config = os.path.join(f1tenth_stack_dir, "config", 'state_publisher.yaml')
     mpc_karim_config = os.path.join(f1tenth_stack_dir, "config", "MPC_karim_params.yaml")
     lidar_filter_config = os.path.join(f1tenth_stack_dir, "config", "lidar_filter.yaml")
+    lqr_config = os.path.join(f1tenth_stack_dir, "config", "lqr_params.yaml")
 
     joy_la = DeclareLaunchArgument(
         "joy_config",
@@ -191,6 +192,11 @@ def generate_launch_description():
         default_value=mpc_karim_config,
         description="MPC Karim config file",
     )
+    lqr_config_la = DeclareLaunchArgument(
+        "lqr_config",
+        default_value=lqr_config,
+        description="LQR config file"
+    )
     use_sim_time_la = DeclareLaunchArgument(
         "use_sim_time",
         default_value="False",
@@ -231,6 +237,11 @@ def generate_launch_description():
         default_value="false",
         description="Start the mpc_karim controller node when true",
     )
+    use_lqr_la = DeclareLaunchArgument(
+        "use_lqr",
+        default_value="false",
+        description="Start the lqr controller node when true",
+    )
 
     ld = LaunchDescription(
         [
@@ -252,6 +263,7 @@ def generate_launch_description():
             horizon_mapper_config_la,
             dwa_config_la,
             kayn_config_la,
+            lqr_config_la,
             ekf_config_la,
             use_sim_time_la,
             state_publisher_la,
@@ -263,6 +275,7 @@ def generate_launch_description():
             use_dwa_la,
             use_kayn_la,
             use_mpc_karim_la,
+            use_lqr_la,
         ]
     )
 
@@ -437,6 +450,20 @@ def generate_launch_description():
         emulate_tty=True,
         condition=IfCondition(LaunchConfiguration("use_kayn")),
     )
+    lqr_controller_node = Node(
+        package='lqr_controller',
+        executable='lqr_node',
+        name='adaptive_lqr_controller_node',
+        parameters=[
+            lqr_config,
+            {
+                'use_sim_time': LaunchConfiguration('use_sim_time'),
+            }
+        ],
+        output='screen',
+        emulate_tty=True,
+        condition=IfCondition(LaunchConfiguration("use_lqr"))
+    )
     state_publisher_node = Node(
         package="state_publisher",
         executable="state_publisher",
@@ -519,6 +546,7 @@ def generate_launch_description():
     ld.add_action(kayn_node)
     ld.add_action(state_publisher_node)
     ld.add_action(robot_localization_node)
+    ld.add_action(lqr_controller_node)
 
     ld.add_action(urg_node)
     ld.add_action(lidar_filter_node)
