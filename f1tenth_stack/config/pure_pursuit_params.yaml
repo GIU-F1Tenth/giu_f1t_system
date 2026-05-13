@@ -2,11 +2,11 @@ pure_pursuit_node:
   ros__parameters:
     # Lookahead Distance Parameters
     max_lookahead_distance: 2.9      # Maximum lookahead distance in meters
-    min_lookahead_distance: 1.5      # Minimum lookahead distance in meters
+    min_lookahead_distance: 1.45      # Minimum lookahead distance in meters
 
     # Velocity Control Parameters
     max_velocity: 8.0                 # Maximum allowed velocity in m/s
-    min_velocity: 3.0                 # Minimum allowed velocity in m/s
+    min_velocity: 3.5                 # Minimum allowed velocity in m/s
     vel_division_factor: 1.0          # Factor to reduce velocity commands
     skidding_velocity_thresh: 1.0     # Velocity threshold to prevent skidding
     
