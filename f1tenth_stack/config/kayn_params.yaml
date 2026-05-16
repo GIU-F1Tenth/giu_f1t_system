@@ -3,8 +3,8 @@ kayn_controller_node:
 
     # ── Vehicle ──────────────────────────────────────────────────────────────
     wheelbase: 0.33        # [m]  kinematic model parameter
-    dt: 0.005              # [s]  integration timestep; must equal 1 / control_hz
-    control_hz: 200.0      # [Hz] control loop rate
+    dt: 0.0125             # [s]  integration timestep; must equal 1 / control_hz
+    control_hz: 80.0      # [Hz] control loop rate
     
     # ── Speed / limits ────────────────────────────────────────────────────────
     max_speed:    9.0      # [m/s]
@@ -13,7 +13,7 @@ kayn_controller_node:
     
     # ── Speed scaling ─────────────────────────────────────────────────────────
     straight_speed_scale: 1.0   # applied in WARMUP / STRAIGHT / FALLBACK states
-    curve_speed_scale:    0.8  # applied in CURVE / BLEND_OUT / BLEND_IN states
+    curve_speed_scale:    0.85  # applied in CURVE / BLEND_OUT / BLEND_IN states
     # 0.75 = 75 % of trajectory speed.
 
     # ── LQR ──────────────────────────────────────────────────────────────────
@@ -82,7 +82,7 @@ kayn_controller_node:
     # Hysteresis: exit_threshold must be strictly less than enter_threshold.
     fsm.enter_threshold: 0.10  # kappa above which CURVE is entered  (R < 10 m)
     fsm.exit_threshold:  0.06  # kappa below which STRAIGHT re-enters (R > 16.7 m)
-    fsm.lookahead:       10    # waypoints ahead used for curvature estimate
+    fsm.lookahead:       20    # waypoints ahead used for curvature estimate
 
     # ── Topics ────────────────────────────────────────────────────────────────
     odom_topic:       "/car_state/odom"
