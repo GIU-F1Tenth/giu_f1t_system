@@ -8,4 +8,10 @@ control_gateway:
     speed_cap_topic: "/speed_cap"
     trailing_topic: "/trailing"
 
-    enable_button_index: 4
+    controller_mode: "black" # "gray" or "black"
+
+  
+    black_controller_enable_button_index: 6
+    gray_controller_enable_button_index: 4
+
+
