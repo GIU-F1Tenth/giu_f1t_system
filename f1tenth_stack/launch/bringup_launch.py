@@ -279,6 +279,11 @@ def generate_launch_description():
         ]
     )
 
+    joy_node = Node(
+        package="joy",
+        executable="joy_node",
+        name="joy_node",
+    )
     joy_teleop_node = Node(
         package="joy_teleop",
         executable="joy_teleop",
@@ -525,6 +530,7 @@ def generate_launch_description():
     ld.add_action(DeclareLaunchArgument("scan_topic_name", default_value="scan"))
     ld.add_action(DeclareLaunchArgument("enable_horizon_mapper", default_value="false"))
     
+    ld.add_action(joy_node)
     ld.add_action(joy_teleop_node)
     ld.add_action(ackermann_to_vesc_node)
     ld.add_action(vesc_to_odom_node)
