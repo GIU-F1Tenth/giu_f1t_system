@@ -8,7 +8,7 @@ horizon_mapper_node:
 
     # Horizon parameters
     horizon_N: 40 # Number of prediction steps
-    horizon_T: 0.005 # Time horizon (seconds)
+    horizon_T: 0.0125 # Time horizon (seconds)
 
     # Vehicle parameters
     wheelbase: 0.33 # Vehicle wheelbase (meters)
