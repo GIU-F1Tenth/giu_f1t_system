@@ -1,8 +1,8 @@
 pure_pursuit_node:
   ros__parameters:
     # Lookahead Distance Parameters
-    max_lookahead_distance: 2.9      # Maximum lookahead distance in meters
-    min_lookahead_distance: 1.45      # Minimum lookahead distance in meters
+    max_lookahead_distance: 1.5     # Maximum lookahead distance in meters
+    min_lookahead_distance: 0.7      # Minimum lookahead distance in meters
 
     # Velocity Control Parameters
     vel_division_factor: 1.0          # Factor to reduce velocity commands
@@ -12,27 +12,27 @@ pure_pursuit_node:
     kp: 0.5                           # Proportional gain for steering control
     kd: 1.2                           # Derivative gain for steering control
     k_sigmoid: 8.0                    # Sigmoid steepness for velocity control
-    use_lateral_error_gamma_compensation: true  # Enable compensation of steering angle based on lateral error
+    use_lateral_error_gamma_compensation: false  # Enable compensation of steering angle based on lateral error
     lateral_error_compensation_gain: 0.31  # Gain for lateral error compensation
-    use_lateral_error_speed_reducer: true  # Enable speed reduction based on lateral error
+    use_lateral_error_speed_reducer: false  # Enable speed reduction based on lateral error
     lateral_error_speed_reducer_gain: 2.0  # Gain for speed reduction based on lateral error
-    
+
     use_lateral_deviation_based_lookahead: true  # Enable lookahead distance adjustment based on lateral deviation
     lookahead_velocity_weight: 0.5     # Weight for velocity-based lookahead distance
     lookahead_lateral_deviation_weight: 0.5  # Weight for lateral-error-based lookahead distance
-    max_lateral_deviation: 1.0         # Lateral deviation that maps to maximum lookahead distance
+    max_lateral_deviation: 0.7         # Lateral deviation that maps to maximum lookahead distance.I would recommend to put this value as the minimum lookahead distance
 
     # Topic Names
     cmd_vel_topic: "/pure_pursuit/drive"   # Ackermann drive command topic
-    odometry_topic: "/odom"           # Odometry topic for vehicle pose
+    odometry_topic: "/ego_racecar/odom"           # Odometry topic for vehicle pose
     joy_topic: "/joy"                     # Joystick topic for manual tuning
     pause_topic: "/control_selector"                 # Control selector topic to pause/resume autonomous control
     path_topic: "/pp_path"                   # Topic for the selected path
     tf_target: "map"
-    tf_source: "base_link"
+    tf_source: "ego_racecar/base_link"
 
     fused_odometry_topic: "/car_state/odom"
-    use_fused_odometry: true
+    use_fused_odometry: false
 
     # Timer and Processing Parameters
     control_frequency: 80.0              # Control loop frequency in Hz (1/timer_period)

@@ -1,0 +1,3 @@
+keyboard_switcher:
+  ros__parameters:
+    event_topic: "/keyboard/event"

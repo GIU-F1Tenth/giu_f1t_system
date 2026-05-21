@@ -1,0 +1,18 @@
+gap_steering_node:
+  ros__parameters:
+    scan_topic: "/scan"
+    drive_topic: "/gap_following/drive"
+    filtered_scan_topic: "/gap_following/scan/filtered"
+    control_selector_topic: "/control_selector"
+    limit_angle: 85.0
+    kp: 0.41
+    kd: 1.25
+    k_sigmoid_steering: 10.0 # increase this value to get steeper curve
+    k_sigmoid_linear_vel: 0.3 # increase this value to get steeper curve 
+    arc_length: 0.4 # Half car's width
+    number_of_critical_edges: 4
+    obstacle_distance_thresh: 0.2
+    min_distance: 0.4
+    max_distance: 10.0
+    min_vel: 2.0
+    max_vel: 5.5

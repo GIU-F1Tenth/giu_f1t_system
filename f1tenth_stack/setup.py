@@ -13,6 +13,7 @@ setup(
         ("share/" + package_name, ["package.xml"]),
         (os.path.join("share", package_name, "launch"), glob("launch/*.py")),
         (os.path.join("share", package_name, "config"), glob("config/*.yaml")),
+        (os.path.join("share", package_name, "config_sim"), glob("config_sim/*.yaml")),
         (os.path.join("share", package_name, "maps"), glob("maps/*.png")),
         (os.path.join("share", package_name, "maps"), glob("maps/*.pgm")),
         (os.path.join("share", package_name, "maps"), glob("maps/*.yaml")),

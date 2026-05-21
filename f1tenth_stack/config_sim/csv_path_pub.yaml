@@ -1,0 +1,6 @@
+csv_path_pub:
+  ros__parameters:
+    path_topic: "/pp_path" # "csv_pp_path"
+    csv_path: "/home/george/roboracer_sim/roboracer_ws/src/trajectory_planning/path/lab_map.csv"
+    speed_factor: 1.6
+    inverse: true
