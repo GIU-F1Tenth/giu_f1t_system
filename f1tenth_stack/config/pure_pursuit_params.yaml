@@ -5,6 +5,8 @@ pure_pursuit_node:
     min_lookahead_distance: 1.45      # Minimum lookahead distance in meters
 
     # Velocity Control Parameters
+    max_velocity: 9.0                 # Maximum allowed velocity in m/s
+    min_velocity: 2.1                 # Minimum allowed velocity in m/s
     vel_division_factor: 1.0          # Factor to reduce velocity commands
     skidding_velocity_thresh: 1.0     # Velocity threshold to prevent skidding
     
