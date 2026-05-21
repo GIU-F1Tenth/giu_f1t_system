@@ -1,0 +1,11 @@
+fsm_node:
+  ros__parameters:
+    states:
+      - gap_following
+      - pure_pursuit
+    initial_state: gap_following 
+    objects_topic: object_bboxes
+    output_topic: control_selector
+    trailing_topic: trailing
+    odom_topic: /ego_racecar/odom
+    overtaking_allowed_file_path: "/home/george/mechbyte/software/src/giu_f1t_system/f1tenth_stack/path/overtaing_regions/overtaking_regions.csv"

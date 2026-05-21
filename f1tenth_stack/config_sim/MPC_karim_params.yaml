@@ -1,0 +1,55 @@
+MPC_karim:
+  ros__parameters:
+    # Topics
+    odom_topic: "/car_state/odom"
+    drive_topic: "/mpc_karim/drive"
+    selector_topic: "/control_selector"
+
+    # Path source: csv_path_pub.yaml is parsed at startup; csv_path & inverse
+    # are read from it so MPC_karim and csv_path_pub stay in sync.
+    csv_path_pub_yaml: "/home/jetson/Desktop/mechabyte/software/src/giu_f1t_system/f1tenth_stack/config/csv_path_pub.yaml"
+
+    # MPC sizing
+    horizon:  15           # prediction steps
+    dt: 0.1                # seconds per step
+    wheelbase: 0.33        # F1TENTH wheelbase (m)
+    control_frequency: 50.0  # solve rate (Hz)
+
+    # Cost weights — diag(Q) over [x, y, v, theta], diag(R) over [a, delta]
+    q_x: 3.0
+    q_y: 3.0
+    q_v: 0.3
+    q_theta: 8.0
+    r_a: 0.05
+    r_delta: 2.0
+    # Δu (input-rate) penalties — main knob to damp steering oscillation.
+    r_da: 0.5
+    r_ddelta: 120.0
+
+    # Hard limits
+    a_min: -3.0
+    a_max:  3.0
+    delta_min: -0.4
+    delta_max:  0.4
+    v_min: 0.0
+    v_max: 4.0
+
+    # Scales the per-waypoint speed read from the CSV
+    speed_factor: 0.5
+    # Reference is sampled by arc-length s_k = max(v, min_lookahead_speed)*k*dt
+    # ahead of the nearest waypoint, so a slow/stopped car still sees a useful
+    # forward horizon instead of clustering N waypoints right next to itself.
+    min_lookahead_speed: 2.0
+
+    # Smooths the per-waypoint heading (window in samples). Cuts noise that
+    # otherwise feeds q_theta and drives steering chatter.
+    theta_smooth_window: 7
+
+    # Caps |dδ/dt| on the published steering command (rad/s).
+    steer_rate_limit: 6.0
+
+    # Shifts the first reference sample this many meters forward along the path
+    # past the nearest waypoint, so the MPC plans *into* the corner instead of
+    # toward whatever point is laterally nearest right now. Acts like a
+    # pure-pursuit lookahead applied to the MPC reference.
+    reference_lookahead_distance: 1.0
