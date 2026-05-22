@@ -1,6 +1,6 @@
 object_detection:
   ros__parameters:
-    use_ekf_filter: true                        # Enables scan outlier smoothing; true removes spiky noise but can soften small obstacle detail, false keeps raw returns.
+    use_ekf_filter: false                        # Enables scan outlier smoothing; true removes spiky noise but can soften small obstacle detail, false keeps raw returns.
     use_boundary_filter: true                   # Enables occupancy-map boundary rejection; true removes wall/edge hits more aggressively, false keeps more near-boundary detections.
     use_adaptive_breakpoint: true               # Enables adaptive breakpoint clustering; true splits objects by range-aware gaps, false treats the whole scan as one cluster.
     use_frenet_filtering: false                 # Enables track-boundary filtering in Frenet space; true rejects detections near/outside track edges, false keeps them.

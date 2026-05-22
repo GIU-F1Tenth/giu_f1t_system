@@ -20,7 +20,7 @@ pure_pursuit_node:
     use_lateral_deviation_based_lookahead: true  # Enable lookahead distance adjustment based on lateral deviation
     lookahead_velocity_weight: 0.5     # Weight for velocity-based lookahead distance
     lookahead_lateral_deviation_weight: 0.5  # Weight for lateral-error-based lookahead distance
-    max_lateral_deviation: 1.0         # Lateral deviation that maps to maximum lookahead distance
+    max_lateral_deviation: 1.45          # Lateral deviation that maps to maximum lookahead distance.I would recommend to put this value as the minimum lookahead distance
 
     # Topic Names
     cmd_vel_topic: "/pure_pursuit/drive"   # Ackermann drive command topic
