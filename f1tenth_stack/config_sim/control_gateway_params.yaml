@@ -4,7 +4,7 @@ control_gateway:
     selector_topic: "/control_selector"
     drive_topic: "/drive"
     manual_auto_swap_topic: "/control_gateway/switch_manual_auto"
-    default_controller: "gap_following" # "gap_following" or "pure_pursuit_trailing"
+    default_controller: "gap_following"
     speed_cap_topic: "/speed_cap"
     trailing_topic: "/trailing"
 
