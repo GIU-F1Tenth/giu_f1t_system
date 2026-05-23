@@ -47,6 +47,7 @@ dwa_ackermann_node:
       limit_angle: 120 # The limit angle such that after ± this angle the obstacles are not considered for collision checking.
       max_lidar_distance: 10.0 # Between these distances, we consider the lidar points for collision checking. 
       min_lidar_distance: 2.0 # To avoid considering far away points that are not relevant for collision checking.
+      lidar_downsample_step: 3 # Keep every Nth LiDAR point after filtering. Set to 1 to disable downsampling.
       spread_gaussian: 2.0 # For computing linear velocities for each omega
       kp: 1.8
       kd: 1.2
