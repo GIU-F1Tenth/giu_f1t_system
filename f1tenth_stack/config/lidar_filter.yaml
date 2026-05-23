@@ -5,7 +5,6 @@ lidar_filter:
     odom_topic: "/car_state/odom"
     mask_path: "/home/jetson/Desktop/mechabyte/software/src/giu_f1t_system/f1tenth_stack/maps/map.mask_u.json"
     max_range: -1.0
-    should_spoof: true
     should_filter: true
     spoof_method: "straight_line"
     queue_depth: 10

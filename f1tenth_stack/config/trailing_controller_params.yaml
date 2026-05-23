@@ -1,11 +1,13 @@
 trailing_controller:
   ros__parameters:
-    kp: 1.2
-    kd: 0.2
-    target_gap: 2.2
+    kp: 0.35
+    kd: 0.1
+    target_gap: 2.0
     control_rate: 40.0
     path_topic: "/pp_path"
     object_velocity_topic: "/detected_objects"
     speed_cap_topic: "/speed_cap"
-    max_speed: 2.0
+    odom_topic: "/car_state/odom"
+    opponent_timeout: 0.5
+    max_speed: 3.0
     min_speed: 0.0
