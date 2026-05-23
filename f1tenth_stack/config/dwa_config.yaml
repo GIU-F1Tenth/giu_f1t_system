@@ -17,7 +17,7 @@ dwa_ackermann_node:
     start_topic: "/control_selector"
 
     # General parameters
-    laser_distance_from_base_link: 0.275
+    laser_distance_from_base_link: 0.0
     wheel_base_length: 0.33
     using_colored_horizons: true 
     use_fused_odometry: true
@@ -25,9 +25,9 @@ dwa_ackermann_node:
 
     # DWA params
     dwa:
-      n_v_omega_max: 25 # Maximum number of (v, omega) pairs to evaluate. Increase this value to get smoother trajectories but it will increase the computation time.
+      n_v_omega_max: 17 # Maximum number of (v, omega) pairs to evaluate. Increase this value to get smoother trajectories but it will increase the computation time.
       n_v_omega_min: 8 # Minimum number of (v, omega) pairs to evaluate.
-      prediction_horizon: 8 # Number of steps to predict for each (v, omega) pair. Increase this value to get more future simulations. It will increase the computation time.
+      prediction_horizon: 10 # Number of steps to predict for each (v, omega) pair. Increase this value to get more future simulations. It will increase the computation time.
       omega_max_full: 2.0 # FULL omega window (low speed)
       omega_max_min: 0.7 # MINIMUM omega window (high speed)
 

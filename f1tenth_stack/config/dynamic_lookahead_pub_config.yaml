@@ -13,7 +13,7 @@ dynamic_lookahead_pub_node:
 
     # Topics
     lookahead_marker_topic: "/lookahead_goal"
-    odom_topic: "odom"
+    odom_topic: "/car_state/odom"
     # Path CSV
     csv_path_topic: "/pp_path"
     reverse: False 
@@ -23,7 +23,7 @@ dynamic_lookahead_pub_node:
     source_frame: "base_link"
 
     # Timer update frequency
-    timer_frequency: 30.0  # Hz
+    timer_frequency: 80.0  # Hz
 
     # Marker visualization parameters
     marker.scale_x: 0.3
