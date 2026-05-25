@@ -7,6 +7,7 @@ fsm_node:
     initial_state: pure_pursuit
     objects_topic: object_centers
     output_topic: control_selector
+    global_path_topic: pp_path
     trailing_topic: trailing
     global_path_topic: pp_path
     odom_topic: /car_state/odom
