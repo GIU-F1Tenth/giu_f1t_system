@@ -30,10 +30,13 @@ object_detection:
     tracker_max_age: 5                          # Number of missed updates before a track is dropped; increasing it keeps stale tracks longer, decreasing it removes lost tracks faster.
     track_length: 100.0                         # Track length used for Frenet wrap-around in tracking; increasing or decreasing it changes where longitudinal positions wrap on looped tracks.
 
+    lidar_x_offset: 0.275                       # Lidar position offset from the car's center in the x direction (forward); increasing it shifts detections forward, decreasing it shifts them backward.
+    map_frame: "map"
+
     scan_topic: '/scan'                         
     map_topic: '/map'                           
     raceline_topic: '/pp_path'                  
-    ego_odom_topic: '/ego_racecar/odom'  
+    ego_odom_topic: '/car_state/odom'  
     detected_objects_topic: '/detected_objects' 
     object_bboxes_topic: '/object_bboxes'        
     object_centers_topic: '/object_centers'
