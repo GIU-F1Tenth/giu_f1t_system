@@ -87,6 +87,7 @@ def generate_launch_description():
     lidar_filter_config = os.path.join(f1tenth_stack_dir, "config", "lidar_filter.yaml")
     lqr_config = os.path.join(f1tenth_stack_dir, "config", "lqr_params.yaml")
     opp_tracker_config = os.path.join(f1tenth_stack_dir, "config_sim", "opp_tracker_params.yaml")
+    overtaking_spline_config = os.path.join(f1tenth_stack_dir, "config", "overtaking_spline.yaml")
 
     joy_la = DeclareLaunchArgument(
         "joy_config",
@@ -198,6 +199,16 @@ def generate_launch_description():
         default_value=lqr_config,
         description="LQR config file"
     )
+    opp_tracker_config_la = DeclareLaunchArgument(
+        "opp_tracker_config",
+        default_value=opp_tracker_config,
+        description="Overtake predictor config file"
+    )
+    overtaking_spline_config_la = DeclareLaunchArgument(
+        "overtaking_spline_config",
+        default_value=overtaking_spline_config,
+        description="Overtaking spline config file"
+    )
     use_sim_time_la = DeclareLaunchArgument(
         "use_sim_time",
         default_value="False",
@@ -269,6 +280,8 @@ def generate_launch_description():
             use_sim_time_la,
             state_publisher_la,
             mpc_karim_la,
+            overtaking_spline_config_la,
+            opp_tracker_config_la,
             mapping_mode_la,
             lidar_filter_la,
             use_gap_following_la,
@@ -500,6 +513,14 @@ def generate_launch_description():
         parameters=[opp_tracker_config],
         output='screen'
     )
+    overtaking_spline_node = Node(
+        package='overtaking_spline',
+        executable='overtaking_spline_node',
+        name='overtaking_spline_node',
+        parameters=[overtaking_spline_config],
+        output='screen',
+        emulate_tty=True,
+    )
 
     urg_node2_node_configure_event_handler = RegisterEventHandler(
         event_handler=OnProcessStart(
@@ -563,6 +584,7 @@ def generate_launch_description():
     ld.add_action(state_publisher_node)
     ld.add_action(robot_localization_node)
     ld.add_action(lqr_controller_node)
+    ld.add_action(overtaking_spline_node)
 
     ld.add_action(urg_node)
     ld.add_action(lidar_filter_node)
