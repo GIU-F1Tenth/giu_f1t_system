@@ -9,7 +9,7 @@ opp_tracker:
     collision_radius: 0.5                       # Safety disk around the ego in meters; any opponent inside it at any sampled time triggers a no-overtake. Roughly car half-width + margin.
 
     arrow_scale_seconds: 0.5                    # Must match the multiplier used in obj_detection's velocity arrows (end = origin + v * arrow_scale_seconds). Change both together.
-    min_opponent_speed: 0.05                    # Ignore arrows with magnitude below this (m/s) to suppress jitter-driven false collisions from near-stationary detections.
+    min_opponent_speed: 0.0                     # Ignore arrows with magnitude below this (m/s) to suppress jitter-driven false collisions from near-stationary detections.
 
     prediction_horizons_topic: '/prediction_horizons'  # MarkerArray topic for debug visualization of ego + opponent extrapolated trajectories over the horizon.
     map_frame: 'map'                            # TF frame the horizon markers are published in; must match the frame ego pose and opponent positions live in.

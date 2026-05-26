@@ -86,7 +86,7 @@ def generate_launch_description():
     mpc_karim_config = os.path.join(f1tenth_stack_dir, "config", "MPC_karim_params.yaml")
     lidar_filter_config = os.path.join(f1tenth_stack_dir, "config", "lidar_filter.yaml")
     lqr_config = os.path.join(f1tenth_stack_dir, "config", "lqr_params.yaml")
-    opp_tracker_config = os.path.join(f1tenth_stack_dir, "config_sim", "opp_tracker_params.yaml")
+    opp_tracker_config = os.path.join(f1tenth_stack_dir, "config", "opp_tracker_params.yaml")
     overtaking_spline_config = os.path.join(f1tenth_stack_dir, "config", "overtaking_spline.yaml")
 
     joy_la = DeclareLaunchArgument(

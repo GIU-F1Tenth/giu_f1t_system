@@ -3,12 +3,13 @@ fsm_node:
     states:
       - pure_pursuit_trailing
       - pure_pursuit
-      - gap_following
+      - pure_pursuit_overtaking
     initial_state: pure_pursuit
     objects_topic: object_centers
     output_topic: control_selector
-    global_path_topic: pp_path
+    global_path_topic: global_path
+    overtaking_path_topic: /overtaking_spline/path
+    final_path_topic: pp_path
     trailing_topic: trailing
-    global_path_topic: pp_path
     odom_topic: /car_state/odom
     overtaking_allowed_file_path: "/home/jetson/Desktop/mechabyte/software/src/giu_f1t_system/f1tenth_stack/path/overtaing_regions/under_2_overtaking.csv"

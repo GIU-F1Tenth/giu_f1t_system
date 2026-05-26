@@ -1,7 +1,7 @@
 overtaking_spline_node:
   ros__parameters:
     # ---------- Topics & frames ----------
-    reference_path_topic: "/pp_path"          # nav_msgs/Path with velocity in pose.orientation.w
+    reference_path_topic: "/global_path"      # nav_msgs/Path with velocity in pose.orientation.w
     odom_topic: "/car_state/odom"             # nav_msgs/Odometry, sensor QoS
     object_centers_topic: "/object_centers"   # visualization_msgs/MarkerArray (skips [0] DELETEALL)
     overtake_path_topic: "/overtaking_spline/path"

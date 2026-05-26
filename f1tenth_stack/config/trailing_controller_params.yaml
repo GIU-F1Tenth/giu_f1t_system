@@ -4,7 +4,7 @@ trailing_controller:
     kd: 0.05
     target_gap: 1.75
     control_rate: 40.0
-    path_topic: "/pp_path"
+    path_topic: "/global_path"
     object_velocity_topic: "/detected_objects"
     speed_cap_topic: "/speed_cap"
     odom_topic: "/car_state/odom"

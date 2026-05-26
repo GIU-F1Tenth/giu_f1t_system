@@ -36,7 +36,7 @@ object_detection:
 
     scan_topic: '/scan/filtered'                         
     map_topic: '/map'                           
-    raceline_topic: '/pp_path'                  
+    raceline_topic: '/global_path'                  
     ego_odom_topic: '/car_state/odom'  
     detected_objects_topic: '/detected_objects' 
     object_bboxes_topic: '/object_bboxes'        
