@@ -1,0 +1,15 @@
+opp_tracker:
+  ros__parameters:
+    velocity_topic: '/object_velocities'        # MarkerArray of ARROW markers carrying each opponent's (position, velocity). Must match obj_detection's object_velocities_topic.
+    odom_topic: '/car_state/odom'               # Ego Odometry topic; pose and twist (twist assumed to be in base_link frame, rotated into map internally).
+    is_overtake_topic: '/is_overtake'           # std_msgs/Bool published every velocities tick; true if no predicted collision over the horizon, false otherwise.
+
+    prediction_horizon: 1.5                     # Total look-ahead time in seconds; increasing it makes the check more conservative (more time for a collision to appear), decreasing it tolerates closer approaches.
+    prediction_dt: 0.1                          # Sub-sampling step along the horizon; smaller catches brief crossings but costs more compute, larger may miss short-lived collision windows.
+    collision_radius: 0.5                       # Safety disk around the ego in meters; any opponent inside it at any sampled time triggers a no-overtake. Roughly car half-width + margin.
+
+    arrow_scale_seconds: 0.5                    # Must match the multiplier used in obj_detection's velocity arrows (end = origin + v * arrow_scale_seconds). Change both together.
+    min_opponent_speed: 0.05                    # Ignore arrows with magnitude below this (m/s) to suppress jitter-driven false collisions from near-stationary detections.
+
+    prediction_horizons_topic: '/prediction_horizons'  # MarkerArray topic for debug visualization of ego + opponent extrapolated trajectories over the horizon.
+    map_frame: 'map'                            # TF frame the horizon markers are published in; must match the frame ego pose and opponent positions live in.

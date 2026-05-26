@@ -86,6 +86,7 @@ def generate_launch_description():
     mpc_karim_config = os.path.join(f1tenth_stack_dir, "config", "MPC_karim_params.yaml")
     lidar_filter_config = os.path.join(f1tenth_stack_dir, "config", "lidar_filter.yaml")
     lqr_config = os.path.join(f1tenth_stack_dir, "config", "lqr_params.yaml")
+    opp_tracker_config = os.path.join(f1tenth_stack_dir, "config_sim", "opp_tracker_params.yaml")
 
     joy_la = DeclareLaunchArgument(
         "joy_config",
@@ -492,6 +493,14 @@ def generate_launch_description():
         output="screen",
     )
     
+    opp_tracker_node = Node(
+        package='decision',
+        executable='opp_tracker_node',
+        name='opp_tracker',
+        parameters=[opp_tracker_config],
+        output='screen'
+    )
+
     urg_node2_node_configure_event_handler = RegisterEventHandler(
         event_handler=OnProcessStart(
             target_action=urg_node,
@@ -541,6 +550,7 @@ def generate_launch_description():
     ld.add_action(teleop_switcher_node)
     ld.add_action(fsm_node)
     ld.add_action(detection_node)
+    ld.add_action(opp_tracker_node)
     ld.add_action(pure_pursuit_node)
     ld.add_action(gap_following_node)
     ld.add_action(csv_pp_node)
