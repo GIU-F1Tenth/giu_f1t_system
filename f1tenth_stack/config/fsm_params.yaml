@@ -1,10 +1,8 @@
 fsm_node:
   ros__parameters:
     states:
-      - pure_pursuit_trailing
-      - pure_pursuit
-      - pure_pursuit_overtaking
-    initial_state: pure_pursuit
+      - pure_pursuit_only
+    initial_state: pure_pursuit_only
     objects_topic: object_centers
     output_topic: control_selector
     global_path_topic: global_path
@@ -13,3 +11,4 @@ fsm_node:
     trailing_topic: trailing
     odom_topic: /car_state/odom
     overtaking_allowed_file_path: "/home/jetson/Desktop/mechabyte/software/src/giu_f1t_system/f1tenth_stack/path/overtaing_regions/under_2_overtaking.csv"
+    fsm_tick_rate: 80.0

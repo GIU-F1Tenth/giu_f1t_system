@@ -9,3 +9,4 @@ fsm_node:
     trailing_topic: trailing
     odom_topic: /ego_racecar/odom
     overtaking_allowed_file_path: "/home/george/mechbyte/software/src/giu_f1t_system/f1tenth_stack/path/overtaing_regions/overtaking_regions.csv"
+    fsm_tick_rate: 80.0
