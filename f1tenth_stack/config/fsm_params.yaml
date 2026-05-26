@@ -12,4 +12,4 @@ fsm_node:
     odom_topic: /car_state/odom
     fsm_tick_rate: 80.0
     overtaking_allowed_file_path: "/home/jetson/Desktop/mechabyte/software/src/giu_f1t_system/f1tenth_stack/path/overtaing_regions/under_5_mod_overtaking.csv"
-    overtaking_path_timeout: 0.5
+    overtaking_path_timeout: 2.0
