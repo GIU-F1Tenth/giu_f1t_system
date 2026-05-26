@@ -12,4 +12,6 @@ fsm_node:
     final_path_topic: pp_path
     trailing_topic: trailing
     odom_topic: /car_state/odom
-    overtaking_allowed_file_path: "/home/jetson/Desktop/mechabyte/software/src/giu_f1t_system/f1tenth_stack/path/overtaing_regions/under_2_overtaking.csv"
+
+    overtaking_allowed_file_path: "/home/jetson/Desktop/mechabyte/software/src/giu_f1t_system/f1tenth_stack/path/overtaing_regions/under_5_mod_overtaking.csv"
+    overtaking_path_timeout: 0.5

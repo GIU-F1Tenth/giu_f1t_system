@@ -1,6 +1,6 @@
 trailing_controller:
   ros__parameters:
-    kp: 0.25
+    kp: 1.5
     kd: 0.05
     target_gap: 1.75
     control_rate: 40.0
