@@ -9,7 +9,7 @@ dwa_ackermann_node:
     odom_topic: "/ego_racecar/odom"
     fused_odom_topic: "/car_state/odom"
     lookahead_sub_topic: "lookahead_goal"
-    csv_path_topic: "/pp_path"
+    csv_path_topic: "/global_path"
     goal_topic: "/goal_pose"
     drive_topic: "/dwa/drive"
     goal_marker_topic: "goal_marker"

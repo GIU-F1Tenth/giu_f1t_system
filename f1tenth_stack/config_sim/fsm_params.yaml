@@ -1,12 +1,17 @@
 fsm_node:
   ros__parameters:
     states:
-      - gap_following
       - pure_pursuit
-    initial_state: gap_following 
-    objects_topic: object_bboxes
+      - pure_pursuit_trailing
+      - pure_pursuit_overtaking
+    initial_state: pure_pursuit 
+    objects_topic: object_centers
     output_topic: control_selector
+    global_path_topic: global_path
+    overtaking_path_topic: /overtaking_spline/path
+    final_path_topic: pp_path
     trailing_topic: trailing
     odom_topic: /ego_racecar/odom
-    overtaking_allowed_file_path: "/home/george/mechbyte/software/src/giu_f1t_system/f1tenth_stack/path/overtaing_regions/overtaking_regions.csv"
     fsm_tick_rate: 80.0
+    overtaking_allowed_file_path: "/home/george/mechbyte/software/src/giu_f1t_system/f1tenth_stack/path/overtaing_regions/overtaking_regions.csv"
+    overtaking_path_timeout: 0.25

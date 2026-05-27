@@ -1,0 +1,32 @@
+overtaking_spline_node:
+  ros__parameters:
+    # ---------- Topics & frames ----------
+    reference_path_topic: "/global_path"      # nav_msgs/Path with velocity in pose.orientation.w
+    odom_topic: "/ego_racecar/odom"             # nav_msgs/Odometry, sensor QoS
+    object_centers_topic: "/object_centers"   # visualization_msgs/MarkerArray (skips [0] DELETEALL)
+    overtake_path_topic: "/overtaking_spline/path"
+    diagnostics_topic: "/overtaking_spline/diagnostics"   # Float64MultiArray: [plan_ms, total_ms, ego_speed, side]
+    candidates_topic: "/overtaking_spline/candidates"     # debug viz, can be disabled
+    frame_id: "map"
+    publish_candidates: true
+    publish_diagnostics: false
+
+    # ---------- Planner ----------
+    planner:
+      car_width: 0.30
+      safety_margin: 0.20
+      track_width: 1.5             # static; matches detection_config.yaml convention
+      lookahead: 6.0               # longitudinal length of the maneuver [m]
+      rejoin_distance: 4.0         # extra distance past opponent before flattening [m]
+      n_samples: 50                # samples along the spline (also = published path length)
+      n_candidates: 7              # lateral-offset candidates evaluated per tick
+      max_lateral_acc: 6.0         # [m/s^2] hard feasibility cap (kappa = a / v^2)
+      racing_line_side: 0          # -1 right, +1 left, 0 no bias
+      racing_line_bias: 0.10       # bias kicks in when clearance is within this band
+      w_obstacle: 50.0
+      w_curvature: 1.0
+      w_offset: 0.5
+      w_bias: 2.0
+
+    # ---------- Runtime ----------
+    control_loop_frequency: 50.0

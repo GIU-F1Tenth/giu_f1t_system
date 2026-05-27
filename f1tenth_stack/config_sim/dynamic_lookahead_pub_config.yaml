@@ -15,7 +15,7 @@ dynamic_lookahead_pub_node:
     lookahead_marker_topic: "/lookahead_goal"
     odom_topic: "ego_racecar/odom"
     # Path CSV
-    csv_path_topic: "/pp_path"
+    csv_path_topic: "/global_path"
     reverse: False 
 
     # Frames

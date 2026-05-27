@@ -92,6 +92,7 @@ def generate_launch_description():
     lidar_filter_config = os.path.join(f1tenth_stack_dir, "config_sim", "lidar_filter.yaml")
     lqr_config = os.path.join(f1tenth_stack_dir, "config_sim", "lqr_params.yaml")
     opp_tracker_config = os.path.join(f1tenth_stack_dir, "config_sim", "opp_tracker_params.yaml")
+    overtaking_spline_config = os.path.join(f1tenth_stack_dir, "config_sim", "overtaking_spline.yaml")
 
     joy_la = DeclareLaunchArgument(
         "joy_config",
@@ -519,6 +520,15 @@ def generate_launch_description():
         output='screen'
     )
 
+    overtaking_spline_node = Node(
+        package='overtaking_spline',
+        executable='overtaking_spline_node',
+        name='overtaking_spline_node',
+        parameters=[overtaking_spline_config],
+        output='screen',
+        emulate_tty=True,
+    )
+
     urg_node2_node_configure_event_handler = RegisterEventHandler(
         event_handler=OnProcessStart(
             target_action=urg_node,
@@ -564,10 +574,10 @@ def generate_launch_description():
     # ld.add_action(vesc_driver_node)
     # ld.add_action(ackermann_mux_node)
     # ld.add_action(static_tf_node)
-    # ld.add_action(trailing_controller_node)
+    ld.add_action(trailing_controller_node)
     # ld.add_action(teleop_switcher_node)
     ld.add_action(keyboard_switcher_node)
-    # ld.add_action(fsm_node)
+    ld.add_action(fsm_node)
     ld.add_action(detection_node)
     ld.add_action(opp_tracker_node)
     ld.add_action(pure_pursuit_node)
@@ -591,5 +601,7 @@ def generate_launch_description():
     # ld.add_action(map_server_node)
     # ld.add_action(amcl_node)
     # ld.add_action(lifecycle_manager_node)
+    ld.add_action(overtaking_spline_node)
+
 
     return ld
