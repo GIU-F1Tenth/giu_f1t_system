@@ -3,7 +3,7 @@ overtaking_spline_node:
     # ---------- Topics & frames ----------
     reference_path_topic: "/global_path"      # nav_msgs/Path with velocity in pose.orientation.w
     odom_topic: "/car_state/odom"             # nav_msgs/Odometry, sensor QoS
-    object_centers_topic: "/object_centers"   # visualization_msgs/MarkerArray (skips [0] DELETEALL)
+    object_velocities_topic: "/object_velocities"   # visualization_msgs/MarkerArray (skips [0] DELETEALL)
     overtake_path_topic: "/overtaking_spline/path"
     diagnostics_topic: "/overtaking_spline/diagnostics"   # Float64MultiArray: [plan_ms, total_ms, ego_speed, side]
     candidates_topic: "/overtaking_spline/candidates"     # debug viz, can be disabled
@@ -13,8 +13,8 @@ overtaking_spline_node:
 
     # ---------- Planner ----------
     planner:
-      car_width: 0.30
-      safety_margin: 0.20
+      car_width: 0.3
+      safety_margin: 0.3
       track_width: 1.5             # static; matches detection_config.yaml convention
       lookahead: 6.0               # longitudinal length of the maneuver [m]
       rejoin_distance: 4.0         # extra distance past opponent before flattening [m]
