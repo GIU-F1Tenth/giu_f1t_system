@@ -505,6 +505,12 @@ def generate_launch_description():
         parameters=[lidar_filter_config],
         output="screen",
     )
+    state_visualizer_node = Node(
+        package="decision",
+        executable="state_visualizer_node",
+        name="state_visualizer_node",
+        output="screen",
+    )
     
     opp_tracker_node = Node(
         package='decision',
@@ -585,6 +591,7 @@ def generate_launch_description():
     ld.add_action(robot_localization_node)
     ld.add_action(lqr_controller_node)
     ld.add_action(overtaking_spline_node)
+    ld.add_action(state_visualizer_node)
 
     ld.add_action(urg_node)
     ld.add_action(lidar_filter_node)
