@@ -11,7 +11,7 @@ object_detection:
     
     breakpoint_base_threshold: 0.3              # Base gap needed to split adjacent points into different clusters; increasing it merges more points, decreasing it creates more splits.
     breakpoint_adaptive_coeff: 0.07             # Extra gap allowance that grows with range; increasing it merges distant points more easily, decreasing it splits distant objects sooner.
-    min_cluster_points: 10                      # Minimum points required to keep a cluster; increasing it removes small/sparse detections, decreasing it keeps smaller but noisier clusters.
+    min_cluster_points: 5                      # Minimum points required to keep a cluster; increasing it removes small/sparse detections, decreasing it keeps smaller but noisier clusters.
     
     inflation_radius: 0.2                       # Inflates occupied map cells before filtering; increasing it rejects detections farther from walls, decreasing it preserves more edge-adjacent detections.
     occupancy_threshold: 65                     # Map value above which a cell counts as occupied; increasing it marks fewer cells as obstacles, decreasing it marks more cells as obstacles.

@@ -2,7 +2,7 @@ trailing_controller:
   ros__parameters:
     kp: 1.5
     kd: 0.05
-    target_gap: 0.75
+    target_gap: 1.75
     control_rate: 40.0
     path_topic: "/global_path"
     object_velocity_topic: "/detected_objects"
