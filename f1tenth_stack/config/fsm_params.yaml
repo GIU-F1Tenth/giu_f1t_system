@@ -1,8 +1,10 @@
 fsm_node:
   ros__parameters:
     states:
-      - pure_pursuit_only
-    initial_state: pure_pursuit_only
+      - pure_pursuit
+      - pure_pursuit_overtaking
+      - pure_pursuit_trailing
+    initial_state: pure_pursuit
     objects_topic: object_centers
     output_topic: control_selector
     global_path_topic: global_path

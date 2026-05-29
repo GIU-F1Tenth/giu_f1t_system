@@ -6,7 +6,7 @@ pure_pursuit_node:
 
     # Velocity Control Parameters
     vel_division_factor: 1.0          # Factor to reduce velocity commands
-    skidding_velocity_thresh: 0.5     # Velocity threshold to prevent skidding
+    skidding_velocity_thresh: 1.5     # Velocity threshold to prevent skidding
     
     # Control Parameters
     kp: 0.5                           # Proportional gain for steering control
