@@ -581,7 +581,7 @@ def generate_launch_description():
     ld.add_action(pure_pursuit_node)
     ld.add_action(gap_following_node)
     ld.add_action(csv_pp_node)
-    ld.add_action(dwa_node)
+    ld.add_action(dwa_node)/joy_node
     ld.add_action(control_gateway_node)
     ld.add_action(mpc_karim_node)
     ld.add_action(horizon_mapper_node)
