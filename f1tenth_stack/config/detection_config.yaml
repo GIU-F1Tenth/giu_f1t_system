@@ -17,10 +17,10 @@ object_detection:
     occupancy_threshold: 65                     # Map value above which a cell counts as occupied; increasing it marks fewer cells as obstacles, decreasing it marks more cells as obstacles.
     boundary_check_radius: 2                    # Grid-cell neighborhood checked around each point for boundary contact; increasing it filters more nearby-wall points, decreasing it is less strict.
     
-    min_bbox_width: 0.10                        # Minimum fitted box width in meters; increasing it rejects thin detections, decreasing it accepts narrower objects and more noise.
-    max_bbox_width: 0.5                         # Maximum fitted box width in meters; increasing it accepts wider detections, decreasing it rejects large merged clusters sooner.
-    min_bbox_height: 0.10                       # Minimum fitted box height in meters; increasing it rejects short/small detections, decreasing it accepts smaller objects and more clutter.
-    max_bbox_height: 0.6                        # Maximum fitted box height in meters; increasing it accepts taller detections, decreasing it rejects oversized clusters sooner.
+    min_bbox_width: 0.1                         # Minimum fitted box width in meters; increasing it rejects thin detections, decreasing it accepts narrower objects and more noise.
+    max_bbox_width: 0.7                         # Maximum fitted box width in meters; increasing it accepts wider detections, decreasing it rejects large merged clusters sooner.
+    min_bbox_height: 0.1                        # Minimum fitted box height in meters; increasing it rejects short/small detections, decreasing it accepts smaller objects and more clutter.
+    max_bbox_height: 0.7                        # Maximum fitted box height in meters; increasing it accepts taller detections, decreasing it rejects oversized clusters sooner.
     
     track_width: 1.5                            # Assumed track width for Frenet filtering; increasing it allows detections farther from centerline, decreasing it removes more side detections.
     left_boundary_inflation: 0.3                # Safety margin subtracted from the left track edge; increasing it rejects more detections near the left boundary, decreasing it allows more.

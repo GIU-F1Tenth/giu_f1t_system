@@ -11,5 +11,5 @@ fsm_node:
     trailing_topic: trailing
     odom_topic: /car_state/odom
     fsm_tick_rate: 80.0
-    overtaking_allowed_file_path: "/home/jetson/Desktop/mechabyte/software/src/giu_f1t_system/f1tenth_stack/path/overtaing_regions/curve_overtaking.csv"
+    overtaking_allowed_file_path: "/home/jetson/Desktop/mechabyte/software/src/giu_f1t_system/f1tenth_stack/path/overtaing_regions/mazo_1_mod_overtaking.csv"
     overtaking_path_timeout: 2.0
